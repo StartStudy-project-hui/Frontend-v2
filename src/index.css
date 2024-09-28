@@ -72,4 +72,8 @@
     @apply bg-background text-foreground;
     font-family: 'Pretendard-Regular';
   }
+
+  .reset-all * {
+    all: revert;
+  }
 }
