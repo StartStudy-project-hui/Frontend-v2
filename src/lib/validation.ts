@@ -11,3 +11,9 @@ export const SigninValidation = z.object({
   email: z.string().email('유효한 이메일이 아닙니다.'),
   pwd: z.string().min(8, { message: '비밀번호는 최소 8글자입니다.' }),
 })
+
+export const ProfileValidation = z.object({
+  file: z.custom<File[]>(),
+  email: z.string().email('유효한 이메일이 아닙니다.'),
+  username: z.string().min(1, { message: '닉네임은 최소 2글자입니다.' }),
+})
