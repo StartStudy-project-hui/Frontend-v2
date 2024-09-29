@@ -1,12 +1,12 @@
-import { Chip, CommentForm } from '@/components'
-import { POST_DETAIL, REPLYS } from '@/constants'
+import { Chip } from '@/components'
+import Comment from '@/components/Comment'
 import { useToast } from '@/hooks/use-toast'
 import { createReadPostConfig } from '@/lib/axios/AxiosModule'
 import { formatDate } from '@/lib/utils'
-import { useAuthStore } from '@/lib/zustand/store'
+import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
 import { BoardDetailDto } from '@/types/Dto'
 import axios from 'axios'
-import { ChevronLeft, Eye, Pencil, Star, Trash2 } from 'lucide-react'
+import { ChevronLeft, Eye } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -14,13 +14,15 @@ export default function BoardDetail() {
   const { boardId } = useParams()
   const navigate = useNavigate()
   const { toast } = useToast()
-  const userinfo = useAuthStore((state) => state.userinfo)
+  // const userinfo = useAuthStore((state) => state.userinfo)
+  const trigger = useTriggerStore((state) => state.trigger)
 
   const [boardData, setBoardData] = useState<BoardDetailDto>()
 
   useEffect(() => {
     getPostDetail()
-  }, [])
+  }, [trigger])
+
   const getPostDetail = async () => {
     if (boardId) {
       try {
@@ -39,7 +41,7 @@ export default function BoardDetail() {
 
   return (
     <div className='mt-10 mx-auto px-5 w-full max-w-screen-lg'>
-      {boardData && (
+      {boardData && boardId && (
         <div>
           <div>
             <div>
@@ -64,17 +66,6 @@ export default function BoardDetail() {
                 <Chip content={boardData.category} />
                 <Chip content={boardData.recruit} />
               </div>
-              <div className='flex gap-5'>
-                <button>
-                  <Star color='black' fill='yellow' />
-                </button>
-                <button>
-                  <Pencil />
-                </button>
-                <button>
-                  <Trash2 color='red' />
-                </button>
-              </div>
             </div>
           </div>
 
@@ -91,22 +82,11 @@ export default function BoardDetail() {
             <hr className='my-5' />
             <div className='flex gap-2 my-5'>
               <span className='font-bold'>댓글</span>
-              <span className='font-bold'>8</span>
+              <span className='font-bold'>
+                {boardData.replyResponseDto.getTotal}
+              </span>
             </div>
-            <CommentForm />
-            {/* <ul className='flex flex-col gap-8 mt-5'>
-          {REPLYS.map((reply) => (
-            <li key={reply.replyId}>
-              <div className='flex gap-5'>
-                <div className='font-bold'>
-                  {reply.memberRequestDto.nickname}
-                </div>
-                <div className='text-gray-500'>{reply.createTime}</div>
-              </div>
-              <p className='mt-3'>{reply.content}</p>
-            </li>
-          ))}
-        </ul> */}
+            <Comment boardId={boardId!} boardData={boardData} />
           </section>
         </div>
       )}

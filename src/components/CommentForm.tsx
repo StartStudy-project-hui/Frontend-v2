@@ -1,28 +1,32 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
-import Loader from './Loader'
+import { createAddCommentConfig } from '@/lib/axios/AxiosModule'
+import axios from 'axios'
+import { useTriggerStore } from '@/lib/zustand/store'
+import { useToast } from '@/hooks/use-toast'
 
 type props = {
-  postId: string
-  commentId?: string
-  setEditId?: React.Dispatch<React.SetStateAction<string>>
+  appear: 'form' | 'reply'
+  boardId: string
+  replyId?: string
   action: 'create' | 'update'
 }
 
-export default function CommentForm() {
-  //     {
-  //   postId,
-  //   commentId,
-  //   setEditId,
-  //   action,
-  // }: props
+export default function CommentForm({ appear, boardId, action }: props) {
+  const { toast } = useToast()
+  const setTrigger = useTriggerStore((state) => state.setTrigger)
+
   const [focused, setFoucsed] = useState(false)
+  const [content, setContent] = useState('')
+  const formRef = useRef<HTMLFormElement>(null)
 
   const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
     e.currentTarget.style.height = 'auto'
     e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px'
+
+    setContent(e.currentTarget.value)
   }
 
   const handleCancel = () => {
@@ -30,32 +34,38 @@ export default function CommentForm() {
     // else setFoucsed(false)
   }
 
-  const handleSubmit = () => {}
-  //   const handleSubmit = async (
-  //     e: React.FormEvent<HTMLFormElement> & { target: HTMLFormElement }
-  //   ) => {
-  //     e.preventDefault()
-  //     if (action === 'create') {
-  //       await createComment({
-  //         userId: user.id,
-  //         postId: postId,
-  //         content: (e.target[0] as HTMLInputElement).value,
-  //       })
-  //     } else if (action === 'update') {
-  //       const res = await updateComment({
-  //         commentId: commentId!,
-  //         content: (e.target[0] as HTMLInputElement).value,
-  //       })
-  //       setEditId!('')
-  //     }
-  //     e.target.reset()
-  //   }
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log('예?', content)
+    if (!content) return
+    try {
+      if (action === 'create') {
+        const config = createAddCommentConfig({ boardId, content })
+        const res = await axios(config)
+
+        console.log('comment C:', res)
+        setTrigger()
+        toast({
+          title: '댓글이 추가되었습니다',
+        })
+      } else if (action === 'update') {
+        // const config = createEditCommentConfig({ content })
+      }
+    } catch (e) {
+      toast({
+        title: '댓글 업데이트 중 에러가 발생했습니다',
+      })
+      console.log(e)
+    }
+    if (formRef.current) formRef.current.reset()
+  }
 
   return (
     <>
       <form
-        onSubmit={handleSubmit}
         className='flex flex-col gap-3 min-h-[50px] md:min-h-[100px]'
+        ref={formRef}
+        onSubmit={handleSubmit}
       >
         <textarea
           placeholder={`${

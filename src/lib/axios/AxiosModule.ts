@@ -5,13 +5,12 @@ import {
   ModifyPostInfo,
   DeletePostInfo,
   ModifyUserInfo,
-  AddParentCommentInfo,
-  AddChildCommentInfo,
-  ModifyCommentInfo,
   ModifyRecruitInfo,
   SigninInfo,
   SignupInfo,
   BoardRequestDto,
+  AddCommentRequestDto,
+  EditCommentRequestDto,
 } from '@/types/Dto'
 import { getAccessToken, getRefreshToken } from '@/lib/utils'
 
@@ -382,10 +381,9 @@ export const createMyLikePostConfig = (
 /* 댓글 기능 구현 */
 // ==============================
 export const createAddCommentConfig = (
-  requestBody: AddChildCommentInfo | AddParentCommentInfo
+  requestBody: AddCommentRequestDto
 ): AxiosRequestConfig => {
   const access = getAccessToken()
-  const refresh = getRefreshToken()
 
   const config: AxiosRequestConfig = {
     baseURL: BASE_URL,
@@ -393,7 +391,6 @@ export const createAddCommentConfig = (
     method: 'POST',
     headers: {
       Access_Token: access,
-      Refresh_Token: refresh,
       'Content-Type': 'application/json',
     },
     data: requestBody,
@@ -402,8 +399,8 @@ export const createAddCommentConfig = (
   return config
 }
 
-export const createModifyCommentConfig = (
-  requestBody: ModifyCommentInfo
+export const createEditCommentConfig = (
+  requestBody: EditCommentRequestDto
 ): AxiosRequestConfig => {
   const access = getAccessToken()
   const refresh = getRefreshToken()
