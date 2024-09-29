@@ -143,7 +143,8 @@ export interface PureReplyDto {
 export interface UserListRequestInfo {
   recruit: string | null
   category: string | null
-  order: number | null
+  order: string | null
+  page?: string
 }
 
 export interface UserPostDto {

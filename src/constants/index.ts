@@ -73,16 +73,11 @@ export const AdminPageList = [
 export const RecruitList = [
   {
     id: 0,
-    title: '전체',
-    value: '전체',
-  },
-  {
-    id: 1,
     title: '모집중',
     value: '모집중',
   },
   {
-    id: 2,
+    id: 1,
     title: '모집완료',
     value: '모집완료',
   },

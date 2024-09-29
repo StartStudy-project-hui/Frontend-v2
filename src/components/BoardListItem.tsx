@@ -11,7 +11,7 @@ export default function BoardListItem({ board }: props) {
   const navigate = useNavigate()
 
   const handleNavigate = (boardId: number) => {
-    navigate(`../board/${boardId}`)
+    navigate(`/board/${boardId}`)
   }
 
   return (

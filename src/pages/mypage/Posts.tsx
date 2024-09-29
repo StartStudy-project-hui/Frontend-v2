@@ -1,15 +1,63 @@
-import { CategoryList, RecruitList } from '@/constants'
-import { useState } from 'react'
+import { BoardListItem, Pagination } from '@/components'
+import { CategoryList, OrderList, RecruitList } from '@/constants'
+import { createUserPostConfig } from '@/lib/axios/AxiosModule'
+import { BoardResponseDto } from '@/types/Dto'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 export default function Posts() {
-  const [categoryId, setCategoryId] = useState(0)
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const [boardResponse, setBoardResponse] = useState<BoardResponseDto>()
   const [recruitId, setRecruitId] = useState(0)
+  const [categoryId, setCategoryId] = useState(0)
+  const [orderId, setOrderId] = useState(0)
+
+  useEffect(() => {
+    history.scrollRestoration = 'auto'
+    getPosts()
+  }, [searchParams])
+
+  const getPosts = async () => {
+    try {
+      const config = createUserPostConfig({
+        recruit: searchParams.get('recruit') || '모집중',
+        category: searchParams.get('category') || '전체',
+        order: searchParams.get('order') || '0',
+        page: searchParams.get('page') || undefined,
+      })
+      const res = await axios(config)
+      setBoardResponse(res.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   const selectCategory = (id: number) => {
+    const category = CategoryList.find((item) => item.id === id)!.value
+    searchParams.set('category', category)
+    setSearchParams(searchParams, { preventScrollReset: true })
     setCategoryId(id)
   }
+
   const selectRecruit = (id: number) => {
+    const recurit = RecruitList.find((item) => item.id === id)!.value
+    searchParams.set('recruit', recurit)
+    setSearchParams(searchParams, { preventScrollReset: true })
     setRecruitId(id)
+  }
+
+  const selectOrder = (id: number) => {
+    const order = OrderList.find((item) => item.id === id)!.value
+    searchParams.set('order', order)
+    setSearchParams(searchParams, { preventScrollReset: true })
+    setOrderId(id)
+  }
+
+  const handldePageChange = (pageNum: number) => {
+    searchParams.set('page', (pageNum - 1).toString())
+    setSearchParams(searchParams)
   }
 
   return (
@@ -28,20 +76,51 @@ export default function Posts() {
         ))}
       </ul>
       <hr />
-      <ul className='flex gap-5 text-xl'>
-        {RecruitList.map((item) => (
-          <li
-            key={item.id}
-            className={`
+      <div className='flex justify-between'>
+        <ul className='flex gap-5 text-xl'>
+          {RecruitList.map((item) => (
+            <li
+              key={item.id}
+              className={`
                       hover:cursor-pointer
                       ${recruitId === item.id ? 'text-black' : 'text-gray-300'} 
                     `}
-            onClick={() => selectRecruit(item.id)}
-          >
-            {item.title}
-          </li>
-        ))}
-      </ul>
+              onClick={() => selectRecruit(item.id)}
+            >
+              {item.title}
+            </li>
+          ))}
+        </ul>
+        <select
+          className='p-2 border'
+          onChange={(e) => selectOrder(Number(e.target.value))}
+        >
+          {OrderList.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.title}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <hr className='my-5' />
+      {boardResponse && (
+        <>
+          <div>
+            <ul className=''>
+              {boardResponse.content.map((board) => (
+                <li key={board.boardId} className='my-8'>
+                  <BoardListItem board={board} />
+                </li>
+              ))}
+            </ul>
+          </div>
+          <Pagination
+            totalPages={boardResponse.totalPages}
+            handlePageChange={handldePageChange}
+          />
+        </>
+      )}
     </div>
   )
 }
