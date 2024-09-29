@@ -231,12 +231,12 @@ export const createEditCommentConfig = (data: EditCommentRequestDto) => {
   return config
 }
 
-export const createDeleteCommentConfig = (requestBody: string) => {
+export const createDeleteCommentConfig = (replyId: string) => {
   const config = userConfig({
-    url: `/reply/${requestBody}`,
+    url: `/reply/${replyId}`,
     method: 'DELETE',
     params: {
-      rno: requestBody,
+      rno: replyId,
     },
   })
 
