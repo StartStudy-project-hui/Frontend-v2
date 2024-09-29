@@ -21,6 +21,7 @@ import AdminManage from '@/pages/admin/AdminManage'
 import BoardDetail from '@/pages/board/BoardDetail'
 import { Toaster } from '@/components/ui/toaster'
 import { Header } from '@/components'
+import CustomError from '@/pages/CustomError'
 
 function App() {
   const RootLayout = () => {
@@ -40,6 +41,7 @@ function App() {
     {
       path: '/',
       element: <RootLayout />,
+      errorElement: <CustomError />,
       children: [
         {
           path: '/',
