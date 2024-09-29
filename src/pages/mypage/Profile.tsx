@@ -1,19 +1,10 @@
-import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { CircleUserRound, Pencil } from 'lucide-react'
 
-import { Loader } from '@/components/index'
-import { Link, useParams } from 'react-router-dom'
-import { USER } from '@/constants'
+import { useAuthStore } from '@/lib/zustand/store'
 
 export default function Page() {
-  const params = useParams()
-
-  // if (!currentUser)
-  //   return (
-  //     <div className='flex-center w-full h-full'>
-  //       <Loader />
-  //     </div>
-  //   )
+  const userinfo = useAuthStore((state) => state.userinfo)
 
   return (
     <>
@@ -27,11 +18,13 @@ export default function Page() {
             />
             <div className='flex flex-col gap-5'>
               <div className='flex flex-col gap-1'>
-                <span className='text-2xl font-bold'>@{USER.username}</span>
-                <span className='text-lg text-gray-500'>{USER.email}</span>
+                <span className='text-2xl font-bold'>
+                  @{userinfo?.username}
+                </span>
+                <span className='text-lg text-gray-500'>{userinfo?.email}</span>
               </div>
               <div>
-                <span className='text-xl font-bold'>{USER.nickname}</span>
+                <span className='text-xl font-bold'>{userinfo?.nickname}</span>
               </div>
             </div>
             <Link to={'./edit'} relative='path' className='ml-auto'>
