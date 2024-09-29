@@ -90,17 +90,29 @@ export interface BoardDetailDto {
   updateTime: string
   createTime: string
   content: string
-  userId: string
-  viewCnt: number
   category: string
+  viewCnt: number
+  postLike: string
   replyResponseDto: ReplyResponseDto
 }
 
-//-------------------------------상세게시글
+export interface DeletePostInfo {
+  boardId: string
+}
 
-export interface MemberRequestDto {
-  memberId: number
-  nickname: string
+// =======================
+// COMMENT
+// =======================
+export interface AddCommentRequestDto {
+  boardId: string
+  content: string
+  parentId?: string
+  replyParent?: boolean
+}
+
+export interface EditCommentRequestDto {
+  replyId: string
+  content: string
 }
 
 export interface ReplyResponseDto {
@@ -109,17 +121,25 @@ export interface ReplyResponseDto {
 }
 
 export interface ReplyDto {
+  replyId: string | undefined
+  parentId: string | undefined
+  nickname: string
+  content: string
+  updateTime: string
+  children: ReplyDto[]
+}
+
+export interface PureReplyDto {
   replyId: number | undefined
   parentId: number | undefined
-  memberRequestDto: MemberRequestDto
+  nickname: string
   content: string
-  createTime: string
-  children: ReplyDto[]
-  myReply: boolean
   updateTime: string
 }
 
-//사용자 게시글----------------------------
+// =======================
+// USER
+// =======================
 export interface UserListRequestInfo {
   recruit: string | null
   category: string | null
@@ -155,11 +175,6 @@ export interface UserPostDto {
   empty: boolean
 }
 
-//게시글삭제
-export interface DeletePostInfo {
-  boardId: string
-}
-//사용자정보
 export interface UserInfoDto {
   username: string
   nickname: string
@@ -167,38 +182,17 @@ export interface UserInfoDto {
   role: string
 }
 
-//사용자정보수정
 export interface ModifyUserInfo {
   username: string | undefined
   nickname: string | undefined
 }
-//댓글
-export interface AddParentCommentInfo {
-  boardId: number | undefined
-  content: string | undefined
-}
-export interface AddChildCommentInfo {
-  boardId: number | undefined
-  parentId: number | undefined
-  content: string | undefined
-}
-export interface ModifyCommentInfo {
-  replyId: number | undefined
-  content: string | undefined
-}
-//유저정보조회
+
 export interface UserDto {
   seq: number
   username: string
   nickname: string
   email: string
   role: string
-}
-
-export interface SortDto {
-  empty: boolean
-  sorted: boolean
-  unsorted: boolean
 }
 
 export interface UserResponseDto {
@@ -213,4 +207,10 @@ export interface UserResponseDto {
   numberOfElements: number
   pageable: PageableDto
   empty: boolean
+}
+
+export interface SortDto {
+  empty: boolean
+  sorted: boolean
+  unsorted: boolean
 }
