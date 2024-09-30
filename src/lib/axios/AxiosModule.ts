@@ -117,7 +117,7 @@ export const createWriteConfig = (data: WritePostRequestDto) => {
 }
 
 export const createReadPostConfig = (boardId: string) => {
-  const config = publicConfig({
+  const config = userConfig({
     url: `/board/${boardId}`,
     method: 'GET',
   })
