@@ -188,7 +188,10 @@ export interface ModifyUserInfo {
   nickname: string | undefined
 }
 
-export interface UserDto {
+// =======================
+// Admin
+// =======================
+export interface RetrievedUserInfo {
   seq: number
   username: string
   nickname: string
@@ -200,7 +203,7 @@ export interface UserResponseDto {
   totalElements: number
   totalPages: number
   size: number
-  content: UserDto[]
+  content: RetrievedUserInfo[]
   number: number
   sort: SortDto
   first: boolean
