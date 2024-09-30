@@ -12,7 +12,7 @@ export default function DashboardLayout() {
         <div className='mx-auto grid w-full max-w-6xl gap-2'>
           <h1 className='text-3xl font-semibold'>관리자 페이지</h1>
         </div>
-        <div className='flex gap-32 mt-12 mx-auto w-full max-w-6xl'>
+        <div className='flex gap-16 mt-12 mx-auto w-full max-w-6xl'>
           <nav>
             <ul className='flex flex-col gap-4 min-w-48 text-lg text-muted-foreground'>
               {AdminPageList.map((item) => (
