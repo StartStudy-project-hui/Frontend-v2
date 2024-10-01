@@ -22,6 +22,7 @@ import BoardDetail from '@/pages/board/BoardDetail'
 import { Toaster } from '@/components/ui/toaster'
 import { Header } from '@/components'
 import CustomError from '@/pages/CustomError'
+import BoardEdit from '@/pages/board/edit/BoardEdit'
 
 function App() {
   const RootLayout = () => {
@@ -50,6 +51,10 @@ function App() {
         {
           path: '/board/:boardId',
           element: <BoardDetail />,
+        },
+        {
+          path: '/board/:boardId/edit',
+          element: <BoardEdit />,
         },
         {
           path: '/write',

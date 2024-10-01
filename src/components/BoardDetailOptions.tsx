@@ -7,6 +7,7 @@ import { BoardDetailDto } from '@/types/Dto'
 import axios from 'axios'
 import { Pencil, Star, Trash2 } from 'lucide-react'
 import { useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 type props = {
   boardId: string
@@ -63,9 +64,17 @@ export default function BoardDetailOptions({ boardId, boardData }: props) {
           {!isFavorite && <Star color='black' />}
         </>
       </button>
-      <button>
+      <Link
+        to={'./edit'}
+        state={{
+          category: boardData.category,
+          title: boardData.title,
+          content: boardData.content,
+          boardId,
+        }}
+      >
         <Pencil />
-      </button>
+      </Link>
       <button>
         <Trash2 color='red' />
       </button>
