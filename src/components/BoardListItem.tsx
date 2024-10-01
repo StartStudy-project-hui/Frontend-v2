@@ -32,7 +32,12 @@ export default function BoardListItem({ board }: props) {
         {sanitizeContent(board.content)}
       </p>
       <div className='flex justify-between mt-4 text-gray-500'>
-        <span>{formatDate(board.time)}</span>
+        <div className='flex gap-3 items-center'>
+          <span className='text-black text-sm font-semibold'>
+            {board.nickname}
+          </span>
+          <span>{formatDate(board.time)}</span>
+        </div>
         <div className='flex gap-5'>
           <div className='flex gap-1'>
             조회수
