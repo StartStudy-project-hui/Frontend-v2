@@ -53,8 +53,10 @@ export default function Home() {
 
     if (searchKeyword) {
       searchParams.set('title', searchKeyword)
-      setSearchParams(searchParams, { preventScrollReset: true })
+    } else {
+      searchParams.set('title', '')
     }
+    setSearchParams(searchParams, { preventScrollReset: true })
   }
 
   const selectCategory = (id: number) => {
