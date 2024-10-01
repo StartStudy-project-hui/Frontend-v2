@@ -17,8 +17,8 @@ type props = {
   editContent?: string
   editId?: string
   setEditId?: (id: string) => void
-  replyId?: string
-  setReplyId?: (id: string) => void
+  parentId?: string
+  setParentId?: (id: string) => void
 }
 
 export default function CommentForm({
@@ -28,6 +28,8 @@ export default function CommentForm({
   editContent,
   editId,
   setEditId,
+  parentId,
+  setParentId,
 }: props) {
   const { toast } = useToast()
   const setTrigger = useTriggerStore((state) => state.setTrigger)
@@ -48,6 +50,7 @@ export default function CommentForm({
 
   const handleCancel = () => {
     if (setEditId) setEditId('')
+    if (setParentId) setParentId('')
     clearTextArea()
     setFoucsed(false)
   }
@@ -57,7 +60,7 @@ export default function CommentForm({
     if (!content) return
     try {
       if (action === 'create') {
-        const config = createAddCommentConfig({ boardId, content })
+        const config = createAddCommentConfig({ boardId, parentId, content })
         const res = await axios(config)
 
         console.log('comment C:', res)
@@ -76,7 +79,7 @@ export default function CommentForm({
         })
         if (setEditId) setEditId('zz')
       }
-      clearTextArea()
+      handleCancel()
     } catch (e) {
       toast({
         title: '댓글 업데이트 중 에러가 발생했습니다',

@@ -3,9 +3,8 @@ import { useToast } from '@/hooks/use-toast'
 import { createDeleteCommentConfig } from '@/lib/axios/AxiosModule'
 import { formatDate } from '@/lib/utils'
 import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
-import { BoardDetailDto } from '@/types/Dto'
+import { BoardDetailDto, PureReplyDto, ReplyDto } from '@/types/Dto'
 import axios from 'axios'
-import { title } from 'process'
 import { useState } from 'react'
 
 type props = {
@@ -19,6 +18,7 @@ export default function Comment({ boardId, boardData }: props) {
   const userinfo = useAuthStore((state) => state.userinfo)
 
   const [editId, setEditId] = useState('')
+  const [parentId, setParentId] = useState('')
 
   const handleDelete = async (replyId: string) => {
     try {
@@ -37,11 +37,41 @@ export default function Comment({ boardId, boardData }: props) {
     }
   }
 
+  const pureReplies = (children: ReplyDto[]) => {
+    const pureReplyArray = [] as PureReplyDto[]
+
+    const recurChildren = (children: ReplyDto[]) => {
+      if (children.length === 0) return
+
+      for (let i = 0; i < children.length; i++) {
+        const { replyId, parentId, nickname, content, updateTime } = children[i]
+        pureReplyArray.push({
+          replyId,
+          parentId,
+          nickname,
+          content,
+          updateTime,
+        })
+        recurChildren(children[i].children)
+      }
+    }
+
+    recurChildren(children)
+
+    pureReplyArray.sort((a, b) => {
+      return new Date(a.updateTime).getTime() - new Date(b.updateTime).getTime()
+    })
+
+    return pureReplyArray
+  }
+
   return (
     <div>
       <CommentForm appear='form' boardId={boardId!} action='create' />
       <ul className='flex flex-col gap-8 mt-5'>
         {boardData.replyResponseDto.replies.map((comment) => {
+          const replies = pureReplies(comment.children)
+
           return (
             <li className='h-fit' key={comment.replyId}>
               <div>
@@ -74,7 +104,80 @@ export default function Comment({ boardId, boardData }: props) {
                 {!(editId === comment.replyId) && (
                   <p className='mt-1 text-lg'>{comment.content}</p>
                 )}
+                {parentId === comment.replyId && (
+                  <CommentForm
+                    appear='reply'
+                    boardId={boardId}
+                    action='create'
+                    parentId={parentId}
+                    setParentId={setParentId}
+                  />
+                )}
+                {!(parentId === comment.replyId) && (
+                  <button
+                    className='mt-1 ml-2 text-gray-500'
+                    onClick={() => setParentId(comment.replyId!)}
+                  >
+                    답글
+                  </button>
+                )}
               </div>
+              <ul className='mt-1 ml-5'>
+                {replies.map((reply) => (
+                  <li key={reply.replyId}>
+                    <div>
+                      <div className='flex gap-5'>
+                        <div className='font-bold'>{reply.nickname}</div>
+                        <div className='text-gray-500'>
+                          {formatDate(reply.updateTime)}
+                        </div>
+                        {userinfo?.email === reply.nickname && (
+                          <div className='flex gap-2'>
+                            <button onClick={() => setEditId(reply.replyId!)}>
+                              수정
+                            </button>
+                            <button
+                              onClick={() => handleDelete(reply.replyId!)}
+                            >
+                              삭제
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                      {editId === reply.replyId && (
+                        <CommentForm
+                          appear='edit'
+                          action='update'
+                          boardId={boardId}
+                          editContent={reply.content}
+                          editId={editId}
+                          setEditId={setEditId}
+                        />
+                      )}
+                      {!(editId === reply.replyId) && (
+                        <p className='mt-1 text-lg'>{reply.content}</p>
+                      )}
+                      {parentId === reply.replyId && (
+                        <CommentForm
+                          appear='reply'
+                          boardId={boardId}
+                          action='create'
+                          parentId={parentId}
+                          setParentId={setParentId}
+                        />
+                      )}
+                      {!(parentId === reply.replyId) && (
+                        <button
+                          className='mt-1 ml-2 text-gray-500'
+                          onClick={() => setParentId(reply.replyId!)}
+                        >
+                          답글
+                        </button>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </li>
           )
         })}
