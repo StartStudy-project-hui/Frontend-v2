@@ -24,27 +24,29 @@ export default function DashboardLayout() {
   if (!isAuthenticated) return
 
   return (
-    <div className='flex flex-1 flex-col gap-4 p-4 md:p-10 h-fit bg-muted/40'>
-      <div className='flex flex-col'>
-        <div className='mx-auto grid w-full max-w-6xl gap-2'>
+    <div className='flex p-4 md:p-10 h-fit bg-muted/40'>
+      <div className='flex flex-col min-w-[320px]'>
+        <div className='mx-auto max-w-6xl'>
           <h1 className='text-3xl font-semibold'>마이페이지</h1>
+          <div className='flex mt-12'>
+            <nav className=''>
+              <ul className='flex flex-col gap-4 min-w-48 text-lg text-muted-foreground'>
+                {MyPageList.map((item) => (
+                  <li
+                    key={item.id}
+                    className={`${currentPath === item.value ? 'text-xl text-black font-semibold' : ''} hover:cursor-pointer`}
+                    onClick={() => navigate(item.value)}
+                  >
+                    {item.title}
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
         </div>
-        <div className='flex gap-32 mt-12 mx-auto w-full max-w-6xl'>
-          <nav>
-            <ul className='flex flex-col gap-4 min-w-48 text-lg text-muted-foreground'>
-              {MyPageList.map((item) => (
-                <li
-                  key={item.id}
-                  className={`${currentPath === item.value ? 'text-xl text-black font-semibold' : ''} hover:cursor-pointer`}
-                  onClick={() => navigate(item.value)}
-                >
-                  {item.title}
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <Outlet />
-        </div>
+      </div>
+      <div className='mr-auto w-full max-w-3xl'>
+        <Outlet />
       </div>
     </div>
   )
