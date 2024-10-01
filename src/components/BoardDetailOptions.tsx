@@ -1,5 +1,7 @@
+import { useToast } from '@/hooks/use-toast'
 import {
   createPostLikePostConfig,
+  createRemovePostConfig,
   DeleteLikePostConfig,
 } from '@/lib/axios/AxiosModule'
 import { useTriggerStore } from '@/lib/zustand/store'
@@ -7,7 +9,7 @@ import { BoardDetailDto } from '@/types/Dto'
 import axios from 'axios'
 import { Pencil, Star, Trash2 } from 'lucide-react'
 import { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 type props = {
   boardId: string
@@ -15,6 +17,8 @@ type props = {
 }
 
 export default function BoardDetailOptions({ boardId, boardData }: props) {
+  const { toast } = useToast()
+  const navigate = useNavigate()
   const abortControllerRef = useRef<AbortController | null>(null)
   const setTrigger = useTriggerStore((state) => state.setTrigger)
 
@@ -56,6 +60,20 @@ export default function BoardDetailOptions({ boardId, boardData }: props) {
     }
   }
 
+  const handleDeleteBoard = async () => {
+    if (confirm('정말로 게시글을 삭제하시겠어요?'))
+      try {
+        const config = createRemovePostConfig({ boardId })
+        await axios(config)
+        navigate(-1)
+        toast({
+          title: '게시글이 삭제되었습니다',
+        })
+      } catch (e) {
+        console.log(e)
+      }
+  }
+
   return (
     <div className='flex gap-5'>
       <button onClick={toggleBoardFavorites}>
@@ -75,7 +93,7 @@ export default function BoardDetailOptions({ boardId, boardData }: props) {
       >
         <Pencil />
       </Link>
-      <button>
+      <button onClick={handleDeleteBoard}>
         <Trash2 color='red' />
       </button>
     </div>
