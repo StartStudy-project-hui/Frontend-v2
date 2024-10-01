@@ -103,7 +103,7 @@ export default function Posts() {
         </select>
       </div>
 
-      <hr className='my-5' />
+      <hr className='' />
       {boardResponse && (
         <>
           <div>
