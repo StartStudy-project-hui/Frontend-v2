@@ -1,4 +1,5 @@
 import { Chip } from '@/components'
+import BoardDetailOptions from '@/components/BoardDetailOptions'
 import Comment from '@/components/Comment'
 import { useToast } from '@/hooks/use-toast'
 import { createReadPostConfig } from '@/lib/axios/AxiosModule'
@@ -66,6 +67,7 @@ export default function BoardDetail() {
                 <Chip content={boardData.category} />
                 <Chip content={boardData.recruit} />
               </div>
+              <BoardDetailOptions boardId={boardId} boardData={boardData} />
             </div>
           </div>
 
