@@ -93,6 +93,7 @@ export interface BoardDetailDto {
   category: string
   viewCnt: number
   postLike: string
+  postLikeId: string
   replyResponseDto: ReplyResponseDto
 }
 
@@ -130,8 +131,8 @@ export interface ReplyDto {
 }
 
 export interface PureReplyDto {
-  replyId: number | undefined
-  parentId: number | undefined
+  replyId: string | undefined
+  parentId: string | undefined
   nickname: string
   content: string
   updateTime: string
