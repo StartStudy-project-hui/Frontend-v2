@@ -1,5 +1,6 @@
 import { useToast } from '@/hooks/use-toast'
 import {
+  createAdminRemovePostConfig,
   createPostLikePostConfig,
   createRemovePostConfig,
   DeleteLikePostConfig,
@@ -74,8 +75,24 @@ export default function BoardDetailOptions({ boardId, boardData }: props) {
       }
   }
 
+  const handleAdminDeleteBoard = async () => {
+    try {
+      const config = createAdminRemovePostConfig(boardId)
+      await axios(config)
+      navigate(-1)
+      toast({
+        title: '게시글이 삭제되었습니다',
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return (
     <div className='flex gap-5'>
+      <button onClick={handleAdminDeleteBoard}>
+        <span className='text-red-500'>삭제(관리자)</span>
+      </button>
       <button onClick={toggleBoardFavorites}>
         <>
           {isFavorite && <Star color='gray' fill='yellow' />}
