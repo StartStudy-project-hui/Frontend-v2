@@ -137,7 +137,7 @@ export const createModifyPostConfig = (data: ModifyPostInfo) => {
 
 export const createModifyRecruitConfig = (data: ModifyRecruitInfo) => {
   const config = userConfig({
-    url: `/board/member/recurit/${data.boardId}`,
+    url: `/board/member/recruit/${data.boardId}`,
     method: 'PATCH',
     data: data.recruit,
   })
