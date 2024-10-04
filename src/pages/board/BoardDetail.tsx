@@ -2,7 +2,10 @@ import { Chip } from '@/components'
 import BoardDetailOptions from '@/components/BoardDetailOptions'
 import Comment from '@/components/Comment'
 import { useToast } from '@/hooks/use-toast'
-import { createReadPostConfig } from '@/lib/axios/AxiosModule'
+import {
+  createModifyRecruitConfig,
+  createReadPostConfig,
+} from '@/lib/axios/AxiosModule'
 import { formatDate } from '@/lib/utils'
 import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
 import { BoardDetailDto } from '@/types/Dto'
@@ -17,6 +20,7 @@ export default function BoardDetail() {
   const { toast } = useToast()
   // const userinfo = useAuthStore((state) => state.userinfo)
   const trigger = useTriggerStore((state) => state.trigger)
+  const setTrigger = useTriggerStore((state) => state.setTrigger)
 
   const [boardData, setBoardData] = useState<BoardDetailDto>()
 
@@ -35,6 +39,22 @@ export default function BoardDetail() {
         toast({
           title: '게시글 정보를 받아오는데 실패하였습니다.',
         })
+        console.log(e)
+      }
+    }
+  }
+
+  const toggleRecruit = async () => {
+    if (boardId) {
+      try {
+        const recruit = boardData?.recruit === '모집중' ? '모집완료' : '모집중'
+        const config = createModifyRecruitConfig({ boardId, recruit })
+        await axios(config)
+        setTrigger()
+        toast({
+          title: '모집 구분을 변경하였습니다',
+        })
+      } catch (e) {
         console.log(e)
       }
     }
@@ -66,6 +86,12 @@ export default function BoardDetail() {
               <div className='flex gap-3'>
                 <Chip content={boardData.category} />
                 <Chip content={boardData.recruit} />
+                <button
+                  className='p-1 border-l rounded-lg text-sm'
+                  onClick={toggleRecruit}
+                >
+                  모집변경
+                </button>
               </div>
               <BoardDetailOptions boardId={boardId} boardData={boardData} />
             </div>
