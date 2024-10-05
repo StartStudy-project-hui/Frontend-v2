@@ -14,5 +14,6 @@ export const SigninValidation = z.object({
 
 export const ProfileValidation = z.object({
   email: z.string().email('유효한 이메일이 아닙니다.'),
-  username: z.string().min(1, { message: '닉네임은 최소 2글자입니다.' }),
+  username: z.string(),
+  nickname: z.string().min(1, { message: '닉네임은 최소 2글자입니다.' }),
 })

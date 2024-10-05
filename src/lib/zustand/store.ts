@@ -28,7 +28,7 @@ type AuthStore = {
 
 export const useAuthStore = create<AuthStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       isAuthenticated: false,
       userinfo: {
         username: '',
@@ -41,7 +41,12 @@ export const useAuthStore = create<AuthStore>()(
       },
       setUserInfo: ({ email, nickname, role }) => {
         set({
-          userinfo: { username: '', email, nickname, role },
+          userinfo: {
+            username: get().userinfo!.username,
+            email,
+            nickname,
+            role,
+          },
         })
       },
       signin: async ({ email, pwd }) => {

@@ -14,73 +14,48 @@ import {
 import { Loader } from '@/components/index'
 import { useEffect } from 'react'
 import { useToast } from '@/hooks/use-toast'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui'
+import { ModifyUserInfo, UserInfoDto } from '@/types/Dto'
+import { createModifyUserInfoConfig } from '@/lib/axios/AxiosModule'
+import axios from 'axios'
+import { useAuthStore } from '@/lib/zustand/store'
 
 export default function ProfileEdit() {
   const { toast } = useToast()
-  //   const params = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const userinfo = useLocation().state as UserInfoDto
+  const setUserInfo = useAuthStore((state) => state.setUserInfo)
 
   const form = useForm<z.infer<typeof ProfileValidation>>({
     resolver: zodResolver(ProfileValidation),
     defaultValues: {
-      file: [],
-      //   username: user.username,
-      //   email: user.email,
+      email: userinfo.email,
+      username: userinfo.username,
+      nickname: userinfo.nickname,
     },
   })
 
-  //   useEffect(() => {
-  //     if (user) {
-  //       form.reset({
-  //         file: [],
-  //         username: user.username,
-  //         email: user.email,
-  //       })
-  //     }
-  //   }, [user])
+  const handleSubmit = async (data: z.infer<typeof ProfileValidation>) => {
+    try {
+      const { nickname } = data
+      console.log('username', userinfo.username, nickname)
 
-  const handleSubmit = () => {}
-  // Handler
-  //   const handleSubmit = async (value: z.infer<typeof ProfileValidation>) => {
-  // if (currentUser) {
-  //   const updatedUser = await updateUser({
-  //     userId: currentUser.$id,
-  //     username: value.username,
-  //     file: value.file,
-  //     imageUrl: currentUser.imageUrl,
-  //     imageId: currentUser.imageId,
-  //   })
-
-  //   if (!updatedUser) {
-  //     toast({
-  //       title: `유저 업데이트에 실패했습니다. 다시 시도해 주세요`,
-  //     })
-  //     return
-  //   }
-
-  //   setUser({
-  //     ...user,
-  //     username: updatedUser?.username,
-  //     imageUrl: updatedUser?.imageUrl,
-  //   })
-  //   router.push(`/profile/${params.id}`)
-  // }
-  //   }
-
-  //   if (!currentUser || isLoadingUser)
-  //     return (
-  //       <div className='flex-center w-full h-full'>
-  //         <Loader />
-  //       </div>
-  //     )
-
-  //   if (!isAuthenticated) {
-  //     router.push('/signin')
-  //     return
-  //   }
+      const config = createModifyUserInfoConfig({
+        username: userinfo.username,
+        nickname,
+      })
+      await axios(config)
+      setUserInfo({ ...userinfo, nickname })
+      navigate(-1)
+      toast({
+        title: '유저정보를 변경하였습니다',
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   return (
     <>
@@ -108,6 +83,19 @@ export default function ProfileEdit() {
               <FormField
                 control={form.control}
                 name='username'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>유저명</FormLabel>
+                    <FormControl>
+                      <Input {...field} disabled />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name='nickname'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>닉네임</FormLabel>

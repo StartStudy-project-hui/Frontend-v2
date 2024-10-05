@@ -27,7 +27,12 @@ export default function Page() {
                 <span className='text-xl font-bold'>{userinfo?.nickname}</span>
               </div>
             </div>
-            <Link to={'./edit'} relative='path' className='ml-auto'>
+            <Link
+              className='ml-auto'
+              to={'./edit'}
+              relative='path'
+              state={userinfo}
+            >
               <Pencil />
             </Link>
           </div>
