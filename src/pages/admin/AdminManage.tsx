@@ -34,10 +34,8 @@ export default function AdminManage() {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (searchKeyword) {
-      searchParams.set('username', searchKeyword)
-      setSearchParams(searchParams, { preventScrollReset: true })
-    }
+    searchParams.set('username', searchKeyword)
+    setSearchParams(searchParams, { preventScrollReset: true })
   }
 
   const handldePageChange = (pageNum: number) => {
