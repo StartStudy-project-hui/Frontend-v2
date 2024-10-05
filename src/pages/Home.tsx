@@ -91,18 +91,11 @@ export default function Home() {
   return (
     <div>
       <ScrollRestoration />
-      <section
-        onClick={() => {
-          toast({
-            title: 'Scheduled: Catch up',
-            description: 'Friday, February 10, 2023 at 5:57 PM',
-          })
-        }}
-      >
+      <section>
         <div className='bg-black bg-opacity-90'>
           <div className='pl-32 py-8 text-white'>
-            <p>프로젝트 팀원을 모집해보세요.</p>
-            <p>클릭한번에 ...</p>
+            <p className='text-2xl'>프로젝트 팀원을 모집해보세요.</p>
+            <p>협업을 통한 경험 노하우 쌓기!</p>
           </div>
         </div>
       </section>
