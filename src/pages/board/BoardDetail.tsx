@@ -18,7 +18,7 @@ export default function BoardDetail() {
   const { boardId } = useParams()
   const navigate = useNavigate()
   const { toast } = useToast()
-  // const userinfo = useAuthStore((state) => state.userinfo)
+  const userInfo = useAuthStore((state) => state.userinfo)
   const trigger = useTriggerStore((state) => state.trigger)
   const setTrigger = useTriggerStore((state) => state.setTrigger)
 
@@ -86,12 +86,14 @@ export default function BoardDetail() {
               <div className='flex gap-3'>
                 <Chip content={boardData.category} />
                 <Chip content={boardData.recruit} />
-                <button
-                  className='p-1 border-l rounded-lg text-sm'
-                  onClick={toggleRecruit}
-                >
-                  모집변경
-                </button>
+                {userInfo?.nickname === boardData.boardWriteNickname && (
+                  <button
+                    className='p-1 border-l rounded-lg text-sm'
+                    onClick={toggleRecruit}
+                  >
+                    모집변경
+                  </button>
+                )}
               </div>
               <BoardDetailOptions boardId={boardId} boardData={boardData} />
             </div>

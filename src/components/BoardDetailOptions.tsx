@@ -5,7 +5,7 @@ import {
   createRemovePostConfig,
   DeleteLikePostConfig,
 } from '@/lib/axios/AxiosModule'
-import { useTriggerStore } from '@/lib/zustand/store'
+import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
 import { BoardDetailDto } from '@/types/Dto'
 import axios from 'axios'
 import { Pencil, Star, Trash2 } from 'lucide-react'
@@ -21,6 +21,8 @@ export default function BoardDetailOptions({ boardId, boardData }: props) {
   const { toast } = useToast()
   const navigate = useNavigate()
   const abortControllerRef = useRef<AbortController | null>(null)
+  const userInfo = useAuthStore((state) => state.userinfo)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const setTrigger = useTriggerStore((state) => state.setTrigger)
 
   const [isFavorite, setIsFavorite] = useState(
@@ -88,31 +90,39 @@ export default function BoardDetailOptions({ boardId, boardData }: props) {
     }
   }
 
+  if (!isAuthenticated) return
+
   return (
     <div className='flex gap-5'>
-      <button onClick={handleAdminDeleteBoard}>
-        <span className='text-red-500'>삭제(관리자)</span>
-      </button>
+      {userInfo?.role === 'ROLE_ADMIN' && (
+        <button onClick={handleAdminDeleteBoard}>
+          <span className='text-red-500'>삭제(관리자)</span>
+        </button>
+      )}
       <button onClick={toggleBoardFavorites}>
         <>
           {isFavorite && <Star color='gray' fill='yellow' />}
           {!isFavorite && <Star color='black' />}
         </>
       </button>
-      <Link
-        to={'./edit'}
-        state={{
-          category: boardData.category,
-          title: boardData.title,
-          content: boardData.content,
-          boardId,
-        }}
-      >
-        <Pencil />
-      </Link>
-      <button onClick={handleDeleteBoard}>
-        <Trash2 color='red' />
-      </button>
+      {userInfo?.nickname === boardData.boardWriteNickname && (
+        <>
+          <Link
+            to={'./edit'}
+            state={{
+              category: boardData.category,
+              title: boardData.title,
+              content: boardData.content,
+              boardId,
+            }}
+          >
+            <Pencil />
+          </Link>
+          <button onClick={handleDeleteBoard}>
+            <Trash2 color='red' />
+          </button>
+        </>
+      )}
     </div>
   )
 }
