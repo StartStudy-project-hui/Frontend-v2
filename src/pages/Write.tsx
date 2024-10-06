@@ -43,7 +43,8 @@ export default function Write() {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
-  const handleCancle = () => {
+  const handleCancle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
     if (confirm('작성중인 글을 취소하시겠어요?')) {
       navigate(-1)
     }
