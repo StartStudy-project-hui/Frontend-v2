@@ -79,6 +79,9 @@ export default function AdminManage() {
                   이메일
                 </th>
                 <th scope='col' className='px-6 py-3'>
+                  유저명
+                </th>
+                <th scope='col' className='px-6 py-3'>
                   닉네임
                 </th>
                 <th scope='col' className='px-6 py-3'>
@@ -96,6 +99,7 @@ export default function AdminManage() {
                     {item.seq}
                   </th>
                   <td className='px-6 py-4'>{item.email}</td>
+                  <td className='px-6 py-4'>{item.username}</td>
                   <td className='px-6 py-4'>{item.nickname}</td>
                   <td className='px-6 py-4'>{item.role}</td>
                 </tr>
