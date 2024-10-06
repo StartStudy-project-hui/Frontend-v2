@@ -87,7 +87,9 @@ export default function BoardEdit() {
           onChange={(e) => setCategory(e.target.value)}
         >
           {PostCategoryList.map((item) => (
-            <option key={item.id}>{item.title}</option>
+            <option key={item.id} value={item.value}>
+              {item.title}
+            </option>
           ))}
         </select>
       </div>
