@@ -9,20 +9,6 @@ export default function DashboardLayout() {
   const navigate = useNavigate()
   const currentPath = pathname.split('/')[2]
 
-  const { toast } = useToast()
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/')
-      toast({
-        title: '로그인이 필요한 페이지입니다',
-      })
-    }
-  }, [])
-
-  if (!isAuthenticated) return
-
   return (
     <div className='flex p-4 md:p-10 h-fit bg-muted/40'>
       <div className='flex flex-col min-w-[320px]'>

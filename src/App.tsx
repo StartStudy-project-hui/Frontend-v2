@@ -23,6 +23,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { Header } from '@/components'
 import CustomError from '@/pages/CustomError'
 import BoardEdit from '@/pages/board/edit/BoardEdit'
+import ProtectedRouter from '@/lib/react-router/ProtectedRouter'
 
 function App() {
   const RootLayout = () => {
@@ -53,46 +54,51 @@ function App() {
           element: <BoardDetail />,
         },
         {
-          path: '/board/:boardId/edit',
-          element: <BoardEdit />,
-        },
-        {
-          path: '/write',
-          element: <Write />,
-        },
-        {
-          path: '/mypage',
-          element: <DashboardLayout />,
+          element: <ProtectedRouter />,
           children: [
             {
-              path: 'profile',
-              element: <Profile />,
+              path: '/board/:boardId/edit',
+              element: <BoardEdit />,
             },
             {
-              path: 'profile/edit',
-              element: <ProfileEdit />,
+              path: '/write',
+              element: <Write />,
             },
             {
-              path: 'posts',
-              element: <Posts />,
+              path: '/mypage',
+              element: <DashboardLayout />,
+              children: [
+                {
+                  path: 'profile',
+                  element: <Profile />,
+                },
+                {
+                  path: 'profile/edit',
+                  element: <ProfileEdit />,
+                },
+                {
+                  path: 'posts',
+                  element: <Posts />,
+                },
+                {
+                  path: 'likes',
+                  element: <Likes />,
+                },
+              ],
             },
             {
-              path: 'likes',
-              element: <Likes />,
-            },
-          ],
-        },
-        {
-          path: '/admin',
-          element: <AdminDashboardLayout />,
-          children: [
-            {
-              path: 'dashboard',
-              element: <AdminDashboard />,
-            },
-            {
-              path: 'manage',
-              element: <AdminManage />,
+              path: '/admin',
+              element: <AdminDashboardLayout />,
+              children: [
+                {
+                  path: 'dashboard',
+                  element: <AdminDashboard />,
+                },
+                {
+                  path: 'manage',
+                  element: <AdminManage />,
+                },
+              ],
             },
           ],
         },
