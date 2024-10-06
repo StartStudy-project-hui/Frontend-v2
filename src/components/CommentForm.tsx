@@ -7,7 +7,7 @@ import {
   createEditCommentConfig,
 } from '@/lib/axios/AxiosModule'
 import axios from 'axios'
-import { useTriggerStore } from '@/lib/zustand/store'
+import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
 import { useToast } from '@/hooks/use-toast'
 
 type props = {
@@ -33,6 +33,7 @@ export default function CommentForm({
 }: props) {
   const { toast } = useToast()
   const setTrigger = useTriggerStore((state) => state.setTrigger)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
   const [focused, setFoucsed] = useState(false)
@@ -111,10 +112,9 @@ export default function CommentForm({
         <textarea
           className='px-2 w-full border-b border-b-gray-300 outline-none focus:border-b-black overflow-y-hidden resize-none'
           placeholder={`${
-            '댓글 추가...'
-            // isAuthenticated ? '댓글 추가...' : '로그인 후 이용가능합니다'
+            isAuthenticated ? '댓글 추가...' : '로그인 후 이용가능합니다'
           }`}
-          //   disabled={!isAuthenticated}
+          disabled={!isAuthenticated}
           required
           ref={textAreaRef}
           value={content}
