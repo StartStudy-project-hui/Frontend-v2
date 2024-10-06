@@ -5,7 +5,7 @@ import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios, { isAxiosError } from 'axios'
 
-import { SignupInfo } from '@/types/Dto'
+import { SignupRequestDto } from '@/types/Dto'
 import { useAuthStore } from '@/lib/zustand/store'
 import { createSignupConfig } from '@/lib/axios/AxiosModule'
 import { SignupValidation } from '@/lib/validation'
@@ -41,7 +41,7 @@ export default function SignupForm({ handleTarget, closeModal }: props) {
     },
   })
 
-  const handleSignup = async (data: SignupInfo) => {
+  const handleSignup = async (data: SignupRequestDto) => {
     try {
       const config = createSignupConfig(data)
       const res = await axios(config)
@@ -90,7 +90,7 @@ export default function SignupForm({ handleTarget, closeModal }: props) {
       <div className='flex flex-col items-center sm:w-420'>
         <form
           onSubmit={form.handleSubmit(handleSignup)}
-          className='flex flex-col gap-5 w-full min-w-[360px]'
+          className='flex flex-col gap-2 w-full min-w-[360px]'
         >
           <FormField
             control={form.control}
@@ -113,6 +113,19 @@ export default function SignupForm({ handleTarget, closeModal }: props) {
                 <FormLabel className='shad-form_label'>이메일</FormLabel>
                 <FormControl>
                   <Input type='text' className='shad-input' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='nickname'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className='shad-form_label'>닉네임</FormLabel>
+                <FormControl>
+                  <Input type='text' className='' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

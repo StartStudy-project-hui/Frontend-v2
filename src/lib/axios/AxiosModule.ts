@@ -7,7 +7,7 @@ import {
   ModifyUserInfo,
   ModifyRecruitInfo,
   SigninInfo,
-  SignupInfo,
+  SignupRequestDto,
   BoardRequestDto,
   AddCommentRequestDto,
   EditCommentRequestDto,
@@ -49,7 +49,7 @@ const userConfig = (_config: AxiosRequestConfig) => {
 // ==============================
 /* 로그인/로그아웃/회원가입 기능 */
 // ==============================
-export const createSignupConfig = (data: SignupInfo) => {
+export const createSignupConfig = (data: SignupRequestDto) => {
   const config = publicConfig({
     url: '/sign',
     method: 'POST',

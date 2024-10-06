@@ -3,10 +3,11 @@ export interface SigninInfo {
   pwd: string
 }
 
-export interface SignupInfo {
+export interface SignupRequestDto {
   name: string
-  pwd: string
   email: string
+  nickname: string
+  pwd: string
   checkPwd: string
 }
 
