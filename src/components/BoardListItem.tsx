@@ -20,8 +20,11 @@ export default function BoardListItem({ board }: props) {
       onClick={() => handleNavigate(board.boardId)}
     >
       <div className='flex items-center gap-5'>
-        <div className='flex gap-1 min-w-40'>
+        <div className='flex gap-1 min-w-52'>
           <Chip content={board.recurit} />
+          <Chip
+            content={board.connectionType === 'ONLINE' ? '온라인' : '오프라인'}
+          />
           <Chip content={board.type} />
         </div>
         <h2 className='text-lg font-bold text-ellipsis whitespace-nowrap overflow-hidden'>

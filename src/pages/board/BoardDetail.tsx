@@ -1,6 +1,7 @@
 import { Chip } from '@/components'
 import BoardDetailOptions from '@/components/BoardDetailOptions'
 import Comment from '@/components/Comment'
+import KakaoMap from '@/components/KakaoMap'
 import { toast } from '@/hooks/use-toast'
 import { useGetPostById, useUpdateRecruit } from '@/lib/react-query/queries'
 import { formatDate } from '@/lib/utils'
@@ -65,6 +66,7 @@ export default function BoardDetail() {
             <div className='flex justify-between items-center mt-5'>
               <div className='flex gap-3'>
                 <Chip content={boardData.category} />
+                <Chip content={boardData.connectionType} />
                 <Chip content={boardData.recruit} />
                 {userInfo?.nickname === boardData.boardWriteNickname && (
                   <button
@@ -86,8 +88,22 @@ export default function BoardDetail() {
               className='reset-all'
               dangerouslySetInnerHTML={{ __html: boardData.content }}
             />
+            <div className='mt-5 max-w-[500px]'>
+              {boardData.offlineLocation && (
+                <>
+                  <span className='font-bold'>오프라인 위치</span>
+                  <KakaoMap
+                    targetCoords={[
+                      boardData.offlineLocation.x,
+                      boardData.offlineLocation.y,
+                    ]}
+                  />
+                </>
+              )}
+            </div>
           </section>
-
+          {/* <section> */}
+          {/* </section> */}
           <section className='mb-48'>
             <hr className='my-5' />
             <div className='flex gap-2 my-5'>

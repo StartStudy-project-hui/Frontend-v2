@@ -39,6 +39,24 @@ export const OrderList = [
   },
 ]
 
+export const ConnectionTypes = [
+  {
+    id: 0,
+    title: '전체',
+    value: '',
+  },
+  {
+    id: 1,
+    title: '온라인',
+    value: 'ONLINE',
+  },
+  {
+    id: 2,
+    title: '오프라인',
+    value: 'OFFLINE',
+  },
+]
+
 export const MyPageList = [
   {
     id: 0,

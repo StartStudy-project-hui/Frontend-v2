@@ -19,6 +19,7 @@ export default function Chip({ content }: props) {
       case '모집중':
         backgroundColor = 'bg-[#00964E]'
         break
+
       case 'CS':
         backgroundColor = 'bg-[#F1DE08]'
         textColor = 'textblack'
@@ -31,6 +32,13 @@ export default function Chip({ content }: props) {
         break
       case '프로젝트':
         backgroundColor = 'bg-[#D400F6]'
+        break
+
+      case '온라인':
+        backgroundColor = 'bg-[#FF61EF]'
+        break
+      case '오프라인':
+        backgroundColor = 'bg-[#FF7F50]'
         break
     }
 

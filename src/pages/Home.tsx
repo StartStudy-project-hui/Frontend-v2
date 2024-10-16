@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Search } from 'lucide-react'
-import { CategoryList, OrderList } from '@/constants'
+import { CategoryList, ConnectionTypes, OrderList } from '@/constants'
 import { Button } from '@/components/ui'
 import { BoardListItem, Pagination } from '@/components'
 import {
@@ -20,6 +20,7 @@ export default function Home() {
 
   const [categoryId, setCategoryId] = useState(0)
   const [orderId, setOrderId] = useState(0)
+  const [connectionTypeId, setConnectionTypeId] = useState(0)
   const [searchKeyword, setSearchKeyword] = useState('')
 
   const {
@@ -31,6 +32,7 @@ export default function Home() {
     title: searchParams.get('title') || undefined,
     category: searchParams.get('category') || '전체',
     order: searchParams.get('order') || '0',
+    connectionType: searchParams.get('connectionType') || undefined,
     page: searchParams.get('page') || undefined,
   })
 
@@ -65,6 +67,13 @@ export default function Home() {
     searchParams.set('order', order)
     setSearchParams(searchParams, { preventScrollReset: true })
     setOrderId(id)
+  }
+
+  const selectConnectionType = (id: number) => {
+    const connectionType = ConnectionTypes.find((item) => item.id === id)!.value
+    searchParams.set('connectionType', connectionType)
+    setSearchParams(searchParams, { preventScrollReset: true })
+    setConnectionTypeId(id)
   }
 
   const handldePageChange = (pageNum: number) => {
@@ -138,6 +147,31 @@ export default function Home() {
               </li>
             ))}
           </ul>
+          <div className='flex gap-3'>
+            {ConnectionTypes.map((item) => (
+              <label key={item.id} className='flex items-center gap-1'>
+                <input
+                  type='radio'
+                  value={item.value}
+                  checked={connectionTypeId === item.id}
+                  onChange={() => selectConnectionType(item.id)}
+                  className='hidden'
+                />
+                <span
+                  className={`flex items-center justify-center w-4 h-4 border-2 rounded-full cursor-pointer 
+                     ${connectionTypeId === item.id ? 'bg-black border-black' : 'bg-white border-gray-300'}`}
+                >
+                  {connectionTypeId === item.id && (
+                    <span className='w-2 h-2 rounded-full bg-white' />
+                  )}
+                </span>
+                <span>{item.title}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div className='flex justify-between mt-3'>
+          <div></div>
           <Button onClick={handleWrite}>글쓰기</Button>
         </div>
         <hr className='my-5' />

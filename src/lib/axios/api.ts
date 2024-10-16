@@ -107,7 +107,7 @@ export const signOutAccount = async () => {
 export const getPosts = async (
   requestBody: BoardRequestDto
 ): Promise<BoardResponseDto> => {
-  const { category, order, page, title } = requestBody
+  const { category, order, page, title, connectionType } = requestBody
 
   const config = publicConfig({
     url: '/',
@@ -115,6 +115,7 @@ export const getPosts = async (
     params: {
       category,
       order,
+      connectionType,
       page,
       title,
     },
@@ -185,7 +186,7 @@ export const deletePost = async (requestBody: DeletePostInfo) => {
 export const getUserPosts = async (
   data: UserListRequestInfo
 ): Promise<BoardResponseDto> => {
-  const { recruit, category, order, page } = data
+  const { recruit, category, order, page, connectionType } = data
   const config = userConfig({
     url: `/user/lists`,
     method: 'GET',
@@ -193,6 +194,7 @@ export const getUserPosts = async (
       recruit,
       category,
       order,
+      connectionType,
       page,
     },
   })
@@ -222,7 +224,7 @@ export const updateUserInfo = async (data: ModifyUserInfo) => {
 export const getLikedPosts = async (
   data: UserListRequestInfo
 ): Promise<BoardResponseDto> => {
-  const { recruit, category, order, page } = data
+  const { recruit, category, order, page, connectionType } = data
   const config = userConfig({
     url: `/user/post-likes`,
     method: 'GET',
@@ -230,6 +232,7 @@ export const getLikedPosts = async (
       recruit,
       category,
       order,
+      connectionType,
       page,
     },
   })

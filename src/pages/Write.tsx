@@ -7,6 +7,7 @@ import { useAuthStore } from '@/lib/zustand/store'
 import { sanitizeContent } from '@/lib/utils'
 import { useCreatePost } from '@/lib/react-query/queries'
 import { toast } from '@/hooks/use-toast'
+import KakaoMap from '@/components/KakaoMap'
 
 const PostCategoryList = [
   {
@@ -38,9 +39,16 @@ export default function Write() {
   const [category, setCategory] = useState('프로젝트')
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+  const [place, setPlace] = useState('온라인')
+  const [coords, setCoords] = useState<number[]>([])
 
   const { mutateAsync: createPostAsync, isPending: isCreatingPost } =
     useCreatePost()
+
+  const handleChangePlace = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === '온라인') setCoords([])
+    setPlace(e.target.value)
+  }
 
   const handleCancle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
@@ -60,11 +68,21 @@ export default function Write() {
       return
     }
 
+    const connectionType = place === '오프라인' ? 'OFFLINE' : 'ONLINE'
+    const offlineLocation =
+      place === '오프라인' && coords.length > 0
+        ? {
+            x: coords[0],
+            y: coords[1],
+          }
+        : null
     await createPostAsync({
       category,
       title,
       content,
       nickname: userinfo!.nickname,
+      connectionType,
+      offlineLocation,
     })
 
     navigate('/')
@@ -92,6 +110,23 @@ export default function Write() {
       />
       <div className='mt-5 h-96'>
         <HtmlEditor onChange={setContent} />
+      </div>
+      <div className='mt-5'>
+        <div className='flex items-center gap-3'>
+          <span className='font-bold'>장소</span>
+          <select className='p-3 border' onChange={handleChangePlace}>
+            <option value={'온라인'}>온라인</option>
+            <option value={'오프라인'}>오프라인</option>
+          </select>
+        </div>
+        <div className='mt-5'>
+          {place === '오프라인' && (
+            <KakaoMap
+              // targetCoords={[37.565942629174934, 126.98883954144402]}
+              setCoords={setCoords}
+            />
+          )}
+        </div>
       </div>
       <div className='flex justify-between mt-5'>
         <div></div>

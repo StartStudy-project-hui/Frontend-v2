@@ -16,6 +16,11 @@ export interface WritePostRequestDto {
   category: string
   title: string
   nickname: string | null
+  connectionType: string
+  offlineLocation: {
+    x: number
+    y: number
+  } | null
 }
 
 export interface ModifyPostInfo {
@@ -23,6 +28,11 @@ export interface ModifyPostInfo {
   content: string
   category: string
   title: string
+  connectionType: string
+  offlineLocation: {
+    x: number
+    y: number
+  } | null
 }
 
 export interface ModifyRecruitInfo {
@@ -35,8 +45,9 @@ export interface ModifyRecruitInfo {
 // =======================
 export interface BoardRequestDto {
   order: string
-  page?: string
   category: string
+  connectionType?: string
+  page?: string
   title?: string
 }
 
@@ -63,6 +74,7 @@ export interface BoardItemDto {
   boardId: number
   recurit: string
   type: string
+  connectionType: string
   content: string
   title: string
   time: string
@@ -96,6 +108,11 @@ export interface BoardDetailDto {
   postLike: string
   postLikeId: string
   replyResponseDto: ReplyResponseDto
+  connectionType: string
+  offlineLocation: {
+    x: number
+    y: number
+  } | null
 }
 
 export interface DeletePostInfo {
@@ -146,6 +163,7 @@ export interface UserListRequestInfo {
   recruit: string | null
   category: string | null
   order: string | null
+  connectionType?: string
   page?: string
 }
 

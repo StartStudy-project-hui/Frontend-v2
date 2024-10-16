@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Modal } from '@/components'
 import { useAuthStore } from '@/lib/zustand/store'
 import { useEffect } from 'react'
@@ -15,11 +15,11 @@ export default function Header() {
   }
 
   return (
-    <header className='flex justify-between items-center p-5'>
+    <header className='flex justify-between items-center px-5 py-3'>
       <div></div>
-      <button onClick={() => navigate('/')} className=''>
-        LOGO
-      </button>
+      <Link to={'/'}>
+        <img src='/logo.png' className='w-[100px] h-[40px]' />
+      </Link>
       <div className='flex gap-5 px-5'>
         {!isAuthenticated && (
           <>
