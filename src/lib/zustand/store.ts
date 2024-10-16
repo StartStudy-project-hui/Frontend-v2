@@ -1,3 +1,4 @@
+import { removeAccessToken, removeRefreshToken } from '@/lib/utils'
 import { UserInfoDto } from '@/types/Dto'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
@@ -38,6 +39,8 @@ export const useAuthStore = create<AuthStore>()(
         })
       },
       clearAuthStore: () => {
+        removeAccessToken()
+        removeRefreshToken()
         set({
           isAuthenticated: false,
           userinfo: null,

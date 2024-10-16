@@ -10,11 +10,7 @@ export default function Header() {
   const userInfo = useAuthStore((state) => state.userinfo)
   const clearAuthStore = useAuthStore((state) => state.clearAuthStore)
 
-  const { mutateAsync: signOutAccountAsync, isPending: isSigningOut } =
-    useSingoutAccount()
-
   const handleSignOut = async () => {
-    await signOutAccountAsync()
     clearAuthStore()
   }
 
