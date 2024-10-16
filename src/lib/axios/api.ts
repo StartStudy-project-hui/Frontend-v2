@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import {
   WritePostRequestDto,
   UserListRequestInfo,
@@ -11,8 +11,19 @@ import {
   BoardRequestDto,
   AddCommentRequestDto,
   EditCommentRequestDto,
+  BoardResponseDto,
+  UserResponseDto,
+  UserInfoDto,
+  BoardDetailDto,
 } from '@/types/Dto'
-import { getAccessToken, getRefreshToken } from '@/lib/utils'
+import {
+  getAccessToken,
+  getRefreshToken,
+  removeAccessToken,
+  removeRefreshToken,
+  setAccessToken,
+  setRefreshToken,
+} from '@/lib/utils'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -47,29 +58,35 @@ const userConfig = (_config: AxiosRequestConfig) => {
 }
 
 // ==============================
-/* 로그인/로그아웃/회원가입 기능 */
+/* 사용자 인증 */
 // ==============================
-export const createSignupConfig = (data: SignupRequestDto) => {
+export const signUpAccount = async (data: SignupRequestDto) => {
   const config = publicConfig({
     url: '/sign',
     method: 'POST',
     data,
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
-export const createSigninConfig = (data: SigninInfo): AxiosRequestConfig => {
+export const signInAccount = async (data: SigninInfo) => {
   const config = publicConfig({
     url: '/login',
     method: 'POST',
     data,
   })
-
-  return config
+  const res = await axios(config)
+  removeAccessToken()
+  removeRefreshToken()
+  const accessToken = res.headers['access_token']
+  const refreshToken = res.headers['refresh_token']
+  setAccessToken(accessToken)
+  setRefreshToken(refreshToken)
+  return res.data
 }
 
-export const createLogOutConfig = () => {
+export const signOutAccount = async () => {
   const config = userConfig({
     url: '/service-logout',
     method: 'POST',
@@ -77,17 +94,21 @@ export const createLogOutConfig = () => {
       'Content-Type': 'application/json',
     },
   })
+  const res = await axios(config)
+  removeAccessToken()
+  removeRefreshToken()
 
-  return config
+  return res.data
 }
 
 // ==============================
-/* 메인 기능 구현 */
+/* 메인 게시글 리스트 */
 // ==============================
-export const createMainlistConfig = (
+export const getPosts = async (
   requestBody: BoardRequestDto
-): AxiosRequestConfig => {
+): Promise<BoardResponseDto> => {
   const { category, order, page, title } = requestBody
+
   const config = publicConfig({
     url: '/',
     method: 'GET',
@@ -97,54 +118,56 @@ export const createMainlistConfig = (
       page,
       title,
     },
-    withCredentials: true,
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
 // ==============================
-/* 게시판 API */
+/* 게시글 */
 // ==============================
-export const createWriteConfig = (data: WritePostRequestDto) => {
+export const createPost = async (data: WritePostRequestDto) => {
   const config = userConfig({
     url: '/board/member',
     method: 'POST',
     data,
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
-export const createReadPostConfig = (boardId: string) => {
+export const getPostById = async (
+  boardId?: string
+): Promise<BoardDetailDto> => {
   const config = userConfig({
     url: `/board/${boardId}`,
     method: 'GET',
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
-export const createModifyPostConfig = (data: ModifyPostInfo) => {
+export const updatePost = async (data: ModifyPostInfo) => {
   const config = userConfig({
     url: `/board/member`,
     method: 'PATCH',
     data,
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
-export const createModifyRecruitConfig = (data: ModifyRecruitInfo) => {
+export const updateRecruit = async (data: ModifyRecruitInfo) => {
   const config = userConfig({
     url: `/board/member/recruit/${data.boardId}`,
     method: 'PATCH',
     data: data.recruit,
   })
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
-export const createRemovePostConfig = (requestBody: DeletePostInfo) => {
+export const deletePost = async (requestBody: DeletePostInfo) => {
   const { boardId } = requestBody
 
   const config = userConfig({
@@ -152,15 +175,17 @@ export const createRemovePostConfig = (requestBody: DeletePostInfo) => {
     method: 'DELETE',
     params: requestBody,
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
 // ==============================
-/* 마이페이지 기능 */
+/* 마이페이지 */
 // ==============================
-export const createUserPostConfig = (data: UserListRequestInfo) => {
-  const { recruit, category, order } = data
+export const getUserPosts = async (
+  data: UserListRequestInfo
+): Promise<BoardResponseDto> => {
+  const { recruit, category, order, page } = data
   const config = userConfig({
     url: `/user/lists`,
     method: 'GET',
@@ -168,33 +193,36 @@ export const createUserPostConfig = (data: UserListRequestInfo) => {
       recruit,
       category,
       order,
+      page,
     },
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
-export const createGetUserInfoConfig = () => {
+export const getUserInfo = async (): Promise<UserInfoDto> => {
   const config = userConfig({
     url: `/user/info`,
     method: 'GET',
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
-export const createModifyUserInfoConfig = (data: ModifyUserInfo) => {
+export const updateUserInfo = async (data: ModifyUserInfo) => {
   const config = userConfig({
     url: `/user/info`,
     method: 'PATCH',
     data,
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
-export const createMyLikePostConfig = (data: UserListRequestInfo) => {
-  const { recruit, category, order } = data
+export const getLikedPosts = async (
+  data: UserListRequestInfo
+): Promise<BoardResponseDto> => {
+  const { recruit, category, order, page } = data
   const config = userConfig({
     url: `/user/post-likes`,
     method: 'GET',
@@ -202,36 +230,37 @@ export const createMyLikePostConfig = (data: UserListRequestInfo) => {
       recruit,
       category,
       order,
+      page,
     },
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
 // ==============================
-/* 댓글 기능 구현 */
+/* 댓글 */
 // ==============================
-export const createAddCommentConfig = (data: AddCommentRequestDto) => {
+export const createComment = async (data: AddCommentRequestDto) => {
   const config = userConfig({
     url: `/reply`,
     method: 'POST',
     data,
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
-export const createEditCommentConfig = (data: EditCommentRequestDto) => {
+export const updateComment = async (data: EditCommentRequestDto) => {
   const config = userConfig({
     url: `/reply`,
     method: 'PATCH',
     data,
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
-export const createDeleteCommentConfig = (replyId: string) => {
+export const deleteCommentById = async (replyId: string) => {
   const config = userConfig({
     url: `/reply/${replyId}`,
     method: 'DELETE',
@@ -239,47 +268,57 @@ export const createDeleteCommentConfig = (replyId: string) => {
       rno: replyId,
     },
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
 // ==============================
-/* 사용자 관심 글 */
+/* 관심글 등록 */
 // ==============================
-export const createPostLikePostConfig = (boardId: string) => {
+export const likePostById = async (boardId: string, signal: AbortSignal) => {
   const config = userConfig({
     url: `/post-like/${boardId}`,
     method: 'POST',
   })
-
-  return config
+  const res = await axios({ ...config, signal })
+  return res.data
 }
 
-export const DeleteLikePostConfig = (postLikeId: string) => {
+export const unlikePostById = async (
+  postLikeId: string,
+  signal: AbortSignal
+) => {
   const config = userConfig({
     url: `/post-like/${postLikeId}`,
     method: 'DELETE',
   })
-
-  return config
+  const res = await axios({ ...config, signal })
+  return res.data
 }
 
 // ==============================
-/* 관리자 기능 */
+/* 관리자 */
 // ==============================
-export const createGetAllUsersInfoConfig = (username?: string) => {
+export const getUsersInfoFromAdmin = async ({
+  username,
+  page,
+}: {
+  username?: string
+  page?: string
+}): Promise<UserResponseDto> => {
   const config = userConfig({
     url: `/admin/user-all`,
     method: 'GET',
     params: {
-      username: username,
+      username,
+      page,
     },
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }
 
-export const createGetAllUsersPostConfig = (data: UserListRequestInfo) => {
+export const getAdminDashboard = async (data: UserListRequestInfo) => {
   const { recruit, category, order } = data
   const config = userConfig({
     url: `/admin/dash-board`,
@@ -290,14 +329,13 @@ export const createGetAllUsersPostConfig = (data: UserListRequestInfo) => {
       order,
     },
   })
-  return config
 }
 
-export const createAdminRemovePostConfig = (boardId: string) => {
+export const deletePostFromAdmin = async (boardId: string) => {
   const config = userConfig({
     url: `/admin/board/${boardId}?role=ROLE_ADMIN`,
     method: 'DELETE',
   })
-
-  return config
+  const res = await axios(config)
+  return res.data
 }

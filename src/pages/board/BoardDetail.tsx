@@ -1,15 +1,11 @@
 import { Chip } from '@/components'
 import BoardDetailOptions from '@/components/BoardDetailOptions'
 import Comment from '@/components/Comment'
-import { useToast } from '@/hooks/use-toast'
-import {
-  createModifyRecruitConfig,
-  createReadPostConfig,
-} from '@/lib/axios/AxiosModule'
+import { toast } from '@/hooks/use-toast'
+import { useGetPostById, useUpdateRecruit } from '@/lib/react-query/queries'
 import { formatDate } from '@/lib/utils'
 import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
 import { BoardDetailDto } from '@/types/Dto'
-import axios from 'axios'
 import { ChevronLeft, Eye } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -17,46 +13,30 @@ import { useNavigate, useParams } from 'react-router-dom'
 export default function BoardDetail() {
   const { boardId } = useParams()
   const navigate = useNavigate()
-  const { toast } = useToast()
   const userInfo = useAuthStore((state) => state.userinfo)
   const trigger = useTriggerStore((state) => state.trigger)
   const setTrigger = useTriggerStore((state) => state.setTrigger)
 
-  const [boardData, setBoardData] = useState<BoardDetailDto>()
+  const {
+    data: boardData,
+    isPending,
+    refetch: fetchPostDetail,
+  } = useGetPostById(boardId)
+  const { mutateAsync: updateRecruitAsync, isPending: isUpdatingRecruit } =
+    useUpdateRecruit()
 
   useEffect(() => {
-    getPostDetail()
+    fetchPostDetail()
   }, [trigger])
-
-  const getPostDetail = async () => {
-    if (boardId) {
-      try {
-        const config = createReadPostConfig(boardId)
-        const res = await axios(config)
-        console.log(res.data)
-        setBoardData(res.data)
-      } catch (e) {
-        toast({
-          title: '게시글 정보를 받아오는데 실패하였습니다.',
-        })
-        console.log(e)
-      }
-    }
-  }
 
   const toggleRecruit = async () => {
     if (boardId) {
-      try {
-        const recruit = boardData?.recruit === '모집중' ? '모집완료' : '모집중'
-        const config = createModifyRecruitConfig({ boardId, recruit })
-        await axios(config)
-        setTrigger()
-        toast({
-          title: '모집 구분을 변경하였습니다',
-        })
-      } catch (e) {
-        console.log(e)
-      }
+      const recruit = boardData?.recruit === '모집중' ? '모집완료' : '모집중'
+      await updateRecruitAsync({ boardId, recruit })
+      setTrigger()
+      toast({
+        title: '모집 구분을 변경하였습니다',
+      })
     }
   }
 

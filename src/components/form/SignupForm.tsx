@@ -3,11 +3,9 @@
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios, { isAxiosError } from 'axios'
 
 import { SignupRequestDto } from '@/types/Dto'
 import { useAuthStore } from '@/lib/zustand/store'
-import { createSignupConfig } from '@/lib/axios/AxiosModule'
 import { SignupValidation } from '@/lib/validation'
 import {
   Form,
@@ -18,9 +16,13 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Loader } from '@/components/index'
-import { useToast } from '@/hooks/use-toast'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui'
+import {
+  useGetUserInfo,
+  useSignInAccount,
+  useSignUpAccount,
+} from '@/lib/react-query/queries'
 
 type props = {
   handleTarget: (_target: '회원가입' | '로그인' | null) => void
@@ -28,8 +30,15 @@ type props = {
 }
 
 export default function SignupForm({ handleTarget, closeModal }: props) {
-  const { toast } = useToast()
-  const signIn = useAuthStore((state) => state.signin)
+  const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated)
+  const setUserInfo = useAuthStore((state) => state.setUserInfo)
+
+  const { mutateAsync: signUpAccountAsync, isPending: isSigningUp } =
+    useSignUpAccount()
+  const { mutateAsync: signInAccountAsync, isPending: isSigningIn } =
+    useSignInAccount()
+  const { isPending: isGettingUserInfo, refetch: fetchUserInfo } =
+    useGetUserInfo(false)
 
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -42,48 +51,14 @@ export default function SignupForm({ handleTarget, closeModal }: props) {
   })
 
   const handleSignup = async (data: SignupRequestDto) => {
-    try {
-      const config = createSignupConfig(data)
-      const res = await axios(config)
-      console.log('signup data:', res.data)
-      const { email, pwd } = data
-      await signIn({ email, pwd })
-      closeModal()
-    } catch (e) {
-      if (isAxiosError(e)) {
-        toast({
-          title: e.response?.data.message,
-        })
-      }
-    }
+    const { email, pwd } = data
+    await signUpAccountAsync(data)
+    await signInAccountAsync({ email, pwd })
+    const { data: userInfoData } = await fetchUserInfo()
+    setUserInfo(userInfoData!)
+    setIsAuthenticated({ isAuthenticated: true })
+    closeModal()
   }
-
-  // Handler
-  //   const handleSignin = async (user: z.infer<typeof SigninValidation>) => {
-  //     try {
-  //       const session = await signInAccount(user)
-
-  //       if (!session) {
-  //         toast({ title: '로그인에 실패했습니다! 다시 시도해 주세요.' })
-  //         return
-  //       }
-
-  //       const isLoggedIn = await checkAuthUser()
-
-  //       if (isLoggedIn) {
-  //         form.reset()
-  //         router.push('/')
-  //       } else {
-  //         toast({ title: '로그인에 실패했습니다! 다시 시도해 주세요.' })
-  //         return
-  //       }
-  //     } catch (error) {
-  //       toast({ title: '서버 오류입니다! 다시 시도해 주세요.' })
-  //       console.log({ error })
-  //     }
-  //   }
-
-  //   if (isAuthenticated) router.push('/')
 
   return (
     <Form {...form}>

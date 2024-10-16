@@ -13,20 +13,21 @@ import {
 } from '@/components/ui/form'
 import { Loader } from '@/components/index'
 import { useEffect } from 'react'
-import { useToast } from '@/hooks/use-toast'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui'
 import { ModifyUserInfo, UserInfoDto } from '@/types/Dto'
-import { createModifyUserInfoConfig } from '@/lib/axios/AxiosModule'
-import axios from 'axios'
 import { useAuthStore } from '@/lib/zustand/store'
+import { useUpdateUserInfo } from '@/lib/react-query/queries'
+import { toast } from '@/hooks/use-toast'
 
 export default function ProfileEdit() {
-  const { toast } = useToast()
   const navigate = useNavigate()
   const userinfo = useLocation().state as UserInfoDto
   const setUserInfo = useAuthStore((state) => state.setUserInfo)
+
+  const { mutateAsync: updateUserInfoAsync, isPending: isUpdatingUserInfo } =
+    useUpdateUserInfo()
 
   const form = useForm<z.infer<typeof ProfileValidation>>({
     resolver: zodResolver(ProfileValidation),
@@ -38,23 +39,18 @@ export default function ProfileEdit() {
   })
 
   const handleSubmit = async (data: z.infer<typeof ProfileValidation>) => {
-    try {
-      const { nickname } = data
-      console.log('username', userinfo.username, nickname)
+    const { nickname } = data
+    console.log('username', userinfo.username, nickname)
 
-      const config = createModifyUserInfoConfig({
-        username: userinfo.username,
-        nickname,
-      })
-      await axios(config)
-      setUserInfo({ ...userinfo, nickname })
-      navigate(-1)
-      toast({
-        title: '유저정보를 변경하였습니다',
-      })
-    } catch (e) {
-      console.log(e)
-    }
+    await updateUserInfoAsync({
+      username: userinfo.username,
+      nickname,
+    })
+    setUserInfo({ ...userinfo, nickname })
+    navigate(-1)
+    toast({
+      title: '유저정보를 변경하였습니다',
+    })
   }
 
   return (

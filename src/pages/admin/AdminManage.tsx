@@ -1,8 +1,7 @@
 import { Pagination } from '@/components'
 import { Button } from '@/components/ui'
-import { createGetAllUsersInfoConfig } from '@/lib/axios/AxiosModule'
+import { useGetUsersFromAdmin } from '@/lib/react-query/queries'
 import { UserResponseDto } from '@/types/Dto'
-import axios from 'axios'
 import { Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -10,23 +9,21 @@ import { useSearchParams } from 'react-router-dom'
 export default function AdminManage() {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const [userResponse, setUserResponse] = useState<UserResponseDto>()
   const [searchKeyword, setSearchKeyword] = useState('')
+
+  const {
+    data: userResponse,
+    isPending: isFetchingUsersFromAdmin,
+    refetch: fetchUsersFromAdmin,
+  } = useGetUsersFromAdmin({
+    username: searchParams.get('username') || undefined,
+    page: searchParams.get('page') || undefined,
+  })
 
   useEffect(() => {
     history.scrollRestoration = 'auto'
-    getAllUserInfo()
+    fetchUsersFromAdmin()
   }, [searchParams])
-
-  const getAllUserInfo = async () => {
-    try {
-      const config = createGetAllUsersInfoConfig(searchKeyword)
-      const res = await axios(config)
-      setUserResponse(res.data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   const onSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value)

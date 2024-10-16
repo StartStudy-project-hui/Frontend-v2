@@ -1,10 +1,9 @@
 import CommentForm from '@/components/CommentForm'
-import { useToast } from '@/hooks/use-toast'
-import { createDeleteCommentConfig } from '@/lib/axios/AxiosModule'
+import { toast } from '@/hooks/use-toast'
+import { useDeleteCommentById } from '@/lib/react-query/queries'
 import { formatDate } from '@/lib/utils'
 import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
 import { BoardDetailDto, PureReplyDto, ReplyDto } from '@/types/Dto'
-import axios from 'axios'
 import { useState } from 'react'
 
 type props = {
@@ -13,28 +12,22 @@ type props = {
 }
 
 export default function Comment({ boardId, boardData }: props) {
-  const { toast } = useToast()
   const setTrigger = useTriggerStore((state) => state.setTrigger)
   const userinfo = useAuthStore((state) => state.userinfo)
 
   const [editId, setEditId] = useState('')
   const [parentId, setParentId] = useState('')
 
+  const { mutateAsync: deleteCommentAsync, isPending: isDeletingComment } =
+    useDeleteCommentById()
+
   const handleDelete = async (replyId: string) => {
-    try {
-      const config = createDeleteCommentConfig(replyId)
-      const res = await axios(config)
-      console.log('comment D:', res)
-      setTrigger()
-      toast({
-        title: '댓글이 삭제되었습니다',
-      })
-    } catch (e) {
-      toast({
-        title: '댓글 삭제중 에러가 발생했습니다',
-      })
-      console.log(e)
-    }
+    const res = await deleteCommentAsync(replyId)
+    console.log('comment D:', res)
+    setTrigger()
+    toast({
+      title: '댓글이 삭제되었습니다',
+    })
   }
 
   const pureReplies = (children: ReplyDto[]) => {

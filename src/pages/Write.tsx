@@ -1,13 +1,12 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HtmlEditor } from '@/components'
 import { Button } from '@/components/ui'
 import { Input } from '@/components/ui/input'
-import { useToast } from '@/hooks/use-toast'
-import { createWriteConfig } from '@/lib/axios/AxiosModule'
 import { useAuthStore } from '@/lib/zustand/store'
 import { sanitizeContent } from '@/lib/utils'
+import { useCreatePost } from '@/lib/react-query/queries'
+import { toast } from '@/hooks/use-toast'
 
 const PostCategoryList = [
   {
@@ -34,14 +33,14 @@ const PostCategoryList = [
 
 export default function Write() {
   const navigate = useNavigate()
-  const { toast } = useToast()
-
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const userinfo = useAuthStore((state) => state.userinfo)
 
   const [category, setCategory] = useState('프로젝트')
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
+
+  const { mutateAsync: createPostAsync, isPending: isCreatingPost } =
+    useCreatePost()
 
   const handleCancle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
@@ -61,31 +60,15 @@ export default function Write() {
       return
     }
 
-    try {
-      const config = createWriteConfig({
-        category,
-        title,
-        content,
-        nickname: userinfo!.nickname,
-      })
-      await axios(config)
-      navigate('/')
-    } catch (e) {
-      toast({
-        title: '포스팅 중 서버에러가 발생했습니다.',
-      })
-    }
-  }
+    await createPostAsync({
+      category,
+      title,
+      content,
+      nickname: userinfo!.nickname,
+    })
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/')
-      toast({
-        title: '로그인이 필요한 기능입니다.',
-      })
-      return
-    }
-  }, [])
+    navigate('/')
+  }
 
   return (
     <form className='mt-8 mx-auto px-5 max-w-screen-lg' onSubmit={handleSubmit}>

@@ -1,38 +1,32 @@
 import { BoardListItem, Pagination } from '@/components'
 import { CategoryList, OrderList, RecruitList } from '@/constants'
-import { createMyLikePostConfig } from '@/lib/axios/AxiosModule'
+import { useGetLikedPosts } from '@/lib/react-query/queries'
 import { BoardResponseDto } from '@/types/Dto'
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 export default function Posts() {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const [boardResponse, setBoardResponse] = useState<BoardResponseDto>()
   const [recruitId, setRecruitId] = useState(0)
   const [categoryId, setCategoryId] = useState(0)
   const [orderId, setOrderId] = useState(0)
 
+  const {
+    data: boardResponse,
+    isPending: isFetchingLikedPosts,
+    refetch: fetchLikedPosts,
+  } = useGetLikedPosts({
+    recruit: searchParams.get('recruit') || '모집중',
+    category: searchParams.get('category') || '전체',
+    order: searchParams.get('order') || '0',
+    page: searchParams.get('page') || undefined,
+  })
+
   useEffect(() => {
     history.scrollRestoration = 'auto'
-    getPosts()
+    fetchLikedPosts()
   }, [searchParams])
-
-  const getPosts = async () => {
-    try {
-      const config = createMyLikePostConfig({
-        recruit: searchParams.get('recruit') || '모집중',
-        category: searchParams.get('category') || '전체',
-        order: searchParams.get('order') || '0',
-        page: searchParams.get('page') || undefined,
-      })
-      const res = await axios(config)
-      setBoardResponse(res.data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   const selectCategory = (id: number) => {
     const category = CategoryList.find((item) => item.id === id)!.value

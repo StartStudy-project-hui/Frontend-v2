@@ -2,7 +2,6 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { MyPageList } from '@/constants'
 import { useAuthStore } from '@/lib/zustand/store'
 import { useEffect } from 'react'
-import { useToast } from '@/hooks/use-toast'
 
 export default function DashboardLayout() {
   const { pathname } = useLocation()

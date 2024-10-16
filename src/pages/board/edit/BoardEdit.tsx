@@ -1,13 +1,12 @@
-import axios from 'axios'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { HtmlEditor } from '@/components'
 import { Button } from '@/components/ui'
 import { Input } from '@/components/ui/input'
-import { useToast } from '@/hooks/use-toast'
-import { createModifyPostConfig } from '@/lib/axios/AxiosModule'
 import { sanitizeContent } from '@/lib/utils'
 import { ModifyPostInfo } from '@/types/Dto'
+import { useUpdatePost } from '@/lib/react-query/queries'
+import { toast } from '@/hooks/use-toast'
 
 const PostCategoryList = [
   {
@@ -35,13 +34,13 @@ const PostCategoryList = [
 export default function BoardEdit() {
   const navigate = useNavigate()
   const location = useLocation().state as ModifyPostInfo
-  const { toast } = useToast()
 
   const [category, setCategory] = useState(location.category)
   const [title, setTitle] = useState(location.title)
   const [content, setContent] = useState(location.content)
 
-  console.log(location)
+  const { mutateAsync: updatePostAsync, isPending: isUpdatingPost } =
+    useUpdatePost()
 
   const handleCancle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
@@ -61,20 +60,14 @@ export default function BoardEdit() {
       return
     }
 
-    try {
-      const config = createModifyPostConfig({
-        category,
-        title,
-        content,
-        boardId: location.boardId,
-      })
-      await axios(config)
-      navigate('/')
-    } catch (e) {
-      toast({
-        title: '포스팅 중 서버에러가 발생했습니다.',
-      })
-    }
+    await updatePostAsync({
+      category,
+      title,
+      content,
+      boardId: location.boardId,
+    })
+
+    navigate('/')
   }
 
   return (

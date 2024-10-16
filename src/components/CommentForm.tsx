@@ -1,14 +1,8 @@
-'use client'
-
 import { useEffect, useRef, useState } from 'react'
 
-import {
-  createAddCommentConfig,
-  createEditCommentConfig,
-} from '@/lib/axios/AxiosModule'
-import axios from 'axios'
 import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
-import { useToast } from '@/hooks/use-toast'
+import { toast } from '@/hooks/use-toast'
+import { useCrerateComment, useUpdateComment } from '@/lib/react-query/queries'
 
 type props = {
   appear: 'form' | 'edit' | 'reply'
@@ -31,7 +25,6 @@ export default function CommentForm({
   parentId,
   setParentId,
 }: props) {
-  const { toast } = useToast()
   const setTrigger = useTriggerStore((state) => state.setTrigger)
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
@@ -39,6 +32,11 @@ export default function CommentForm({
   const [focused, setFoucsed] = useState(false)
   const [content, setContent] = useState(editContent)
   const formRef = useRef<HTMLFormElement>(null)
+
+  const { mutateAsync: createCommentAsync, isPending: isCreatingComment } =
+    useCrerateComment()
+  const { mutateAsync: updateCommentAsync, isPending: isUpdatingComment } =
+    useUpdateComment()
 
   useEffect(() => {
     resizeTextArea()
@@ -59,34 +57,21 @@ export default function CommentForm({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!content) return
-    try {
-      if (action === 'create') {
-        const config = createAddCommentConfig({ boardId, parentId, content })
-        const res = await axios(config)
 
-        console.log('comment C:', res)
-        setTrigger()
-        toast({
-          title: '댓글이 추가되었습니다',
-        })
-      } else if (action === 'update') {
-        const config = createEditCommentConfig({ replyId: editId!, content })
-        const res = await axios(config)
-
-        console.log('comment U:', res)
-        setTrigger()
-        toast({
-          title: '댓글이 수정되었습니다',
-        })
-        if (setEditId) setEditId('zz')
-      }
-      handleCancel()
-    } catch (e) {
+    if (action === 'create') {
+      await createCommentAsync({ boardId, parentId, content })
+      setTrigger()
       toast({
-        title: '댓글 업데이트 중 에러가 발생했습니다',
+        title: '댓글이 추가되었습니다',
       })
-      console.log(e)
+    } else if (action === 'update') {
+      await updateCommentAsync({ replyId: editId!, content })
+      setTrigger()
+      toast({
+        title: '댓글이 수정되었습니다',
+      })
     }
+    handleCancel()
   }
 
   const resizeTextArea = () => {

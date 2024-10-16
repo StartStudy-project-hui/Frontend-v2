@@ -24,6 +24,7 @@ import { Header } from '@/components'
 import CustomError from '@/pages/CustomError'
 import BoardEdit from '@/pages/board/edit/BoardEdit'
 import ProtectedRouter from '@/lib/react-router/ProtectedRouter'
+import { QueryProvider } from '@/lib/react-query/QueryProvider'
 
 function App() {
   const RootLayout = () => {
@@ -105,7 +106,11 @@ function App() {
       ],
     },
   ])
-  return <RouterProvider router={router} />
+  return (
+    <QueryProvider>
+      <RouterProvider router={router} />
+    </QueryProvider>
+  )
 }
 
 export default App

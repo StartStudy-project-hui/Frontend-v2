@@ -8,8 +8,6 @@ import axios from 'axios'
 
 import { SigninInfo } from '@/types/Dto'
 import { useAuthStore } from '@/lib/zustand/store'
-import { createSigninConfig } from '@/lib/axios/AxiosModule'
-import { useToast } from '@/hooks/use-toast'
 import {
   Form,
   FormControl,
@@ -22,6 +20,7 @@ import { Loader } from '@/components/index'
 import { SigninValidation } from '@/lib/validation'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui'
+import { useGetUserInfo, useSignInAccount } from '@/lib/react-query/queries'
 
 type props = {
   handleTarget: (_target: '회원가입' | '로그인' | null) => void
@@ -29,9 +28,13 @@ type props = {
 }
 
 export default function SigninForm({ handleTarget, closeModal }: props) {
-  const { toast } = useToast()
+  const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated)
+  const setUserInfo = useAuthStore((state) => state.setUserInfo)
 
-  const signIn = useAuthStore((state) => state.signin)
+  const { mutateAsync: signInAccountAsync, isPending: isSigningIn } =
+    useSignInAccount()
+  const { isPending: isFetchingUserInfo, refetch: fetchUserInfo } =
+    useGetUserInfo(false)
 
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),
@@ -42,15 +45,11 @@ export default function SigninForm({ handleTarget, closeModal }: props) {
   })
 
   const handleSignin = async (data: SigninInfo) => {
-    try {
-      await signIn(data)
-      closeModal()
-    } catch (e) {
-      toast({
-        title: '로그인 중 서버에러가 발생했습니다.',
-      })
-      console.log(e)
-    }
+    await signInAccountAsync(data)
+    const { data: userInfoData } = await fetchUserInfo()
+    setUserInfo(userInfoData!)
+    setIsAuthenticated({ isAuthenticated: true })
+    closeModal()
   }
 
   return (

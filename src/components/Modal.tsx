@@ -50,7 +50,9 @@ export default function Modal({ target }: props) {
                 서비스 이용을 위해 접속하세요!
               </DialogDescription>
             </DialogHeader>
-            <SignupForm handleTarget={handleTarget} closeModal={closeModal} />
+            {open && (
+              <SignupForm handleTarget={handleTarget} closeModal={closeModal} />
+            )}
           </>
         )}
 
@@ -68,7 +70,12 @@ export default function Modal({ target }: props) {
                 서비스 이용을 위해 접속하세요!
               </DialogDescription>
             </DialogHeader>
-            <SigininForm handleTarget={handleTarget} closeModal={closeModal} />
+            {open && (
+              <SigininForm
+                handleTarget={handleTarget}
+                closeModal={closeModal}
+              />
+            )}
           </>
         )}
       </DialogContent>

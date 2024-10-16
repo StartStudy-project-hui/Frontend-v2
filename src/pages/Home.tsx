@@ -8,42 +8,36 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom'
-import { useToast } from '@/hooks/use-toast'
-import { createMainlistConfig } from '@/lib/axios/AxiosModule'
+import { toast } from '@/hooks/use-toast'
 import { BoardResponseDto } from '@/types/Dto'
-import axios from 'axios'
 import { useAuthStore } from '@/lib/zustand/store'
+import { useGetPosts } from '@/lib/react-query/queries'
 
 export default function Home() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
-  const { toast } = useToast()
-  const authenticated = useAuthStore((state) => state.isAuthenticated)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
-  const [boardResponse, setBoardResponse] = useState<BoardResponseDto>()
   const [categoryId, setCategoryId] = useState(0)
   const [orderId, setOrderId] = useState(0)
   const [searchKeyword, setSearchKeyword] = useState('')
 
+  const {
+    data: boardResponse,
+    isPending,
+    isError,
+    refetch,
+  } = useGetPosts({
+    title: searchParams.get('title') || undefined,
+    category: searchParams.get('category') || '전체',
+    order: searchParams.get('order') || '0',
+    page: searchParams.get('page') || undefined,
+  })
+
   useEffect(() => {
     history.scrollRestoration = 'auto'
-    getPosts()
+    refetch()
   }, [searchParams])
-
-  const getPosts = async () => {
-    try {
-      const config = createMainlistConfig({
-        title: searchParams.get('title') || undefined,
-        category: searchParams.get('category') || '전체',
-        order: searchParams.get('order') || '0',
-        page: searchParams.get('page') || undefined,
-      })
-      const res = await axios(config)
-      setBoardResponse(res.data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   const onSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value)
@@ -79,7 +73,7 @@ export default function Home() {
   }
 
   const handleWrite = () => {
-    if (!authenticated) {
+    if (!isAuthenticated) {
       toast({
         title: '로그인이 필요한 기능입니다',
       })
