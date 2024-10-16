@@ -18,7 +18,7 @@ export default function Header() {
     <header className='flex justify-between items-center px-5 py-3'>
       <div></div>
       <Link to={'/'}>
-        <img src='/logo.png' className='w-[100px] h-[40px]' />
+        <img src='/logo.png' className='w-[150px] h-[50px]' />
       </Link>
       <div className='flex gap-5 px-5'>
         {!isAuthenticated && (
