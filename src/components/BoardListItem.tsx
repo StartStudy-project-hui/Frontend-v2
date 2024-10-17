@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom'
-import Chip from '@/components/Chip'
-import { formatDate, sanitizeContent } from '@/lib/utils'
+
 import { BoardItemDto } from '@/types/Dto'
+import { formatDate, sanitizeContent } from '@/lib/utils'
+import Chip from '@/components/Chip'
 
 type props = {
   board: BoardItemDto

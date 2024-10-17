@@ -1,15 +1,12 @@
-import { Chip } from '@/components'
-import BoardDetailOptions from '@/components/BoardDetailOptions'
-import Comment from '@/components/Comment'
-import KakaoMap from '@/components/KakaoMap'
-import { toast } from '@/hooks/use-toast'
-import { useGetPostById, useUpdateRecruit } from '@/lib/react-query/queries'
-import { formatDate } from '@/lib/utils'
-import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
-import { BoardDetailDto } from '@/types/Dto'
-import { ChevronLeft, Eye } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { ChevronLeft, Eye } from 'lucide-react'
+
+import { useGetPostById, useUpdateRecruit } from '@/lib/react-query/queries'
+import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
+import { formatDate } from '@/lib/utils'
+import { toast } from '@/hooks/use-toast'
+import { BoardDetailOptions, Chip, Comment, KakaoMap } from '@/components'
 
 export default function BoardDetail() {
   const { boardId } = useParams()

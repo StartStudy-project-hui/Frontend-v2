@@ -1,8 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { Modal } from '@/components'
+
 import { useAuthStore } from '@/lib/zustand/store'
-import { useEffect } from 'react'
-import { useSingoutAccount } from '@/lib/react-query/queries'
+import { Modal } from '@/components'
 
 export default function Header() {
   const navigate = useNavigate()

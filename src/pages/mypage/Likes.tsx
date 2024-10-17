@@ -1,14 +1,14 @@
-import { BoardListItem, Pagination } from '@/components'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+
+import { useGetLikedPosts } from '@/lib/react-query/queries'
 import {
   CategoryList,
   ConnectionTypes,
   OrderList,
   RecruitList,
 } from '@/constants'
-import { useGetLikedPosts } from '@/lib/react-query/queries'
-import { BoardResponseDto } from '@/types/Dto'
-import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { BoardListItem, Pagination } from '@/components'
 
 export default function Posts() {
   const [searchParams, setSearchParams] = useSearchParams()

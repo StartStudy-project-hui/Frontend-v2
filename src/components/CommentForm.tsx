@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
-import { toast } from '@/hooks/use-toast'
 import { useCrerateComment, useUpdateComment } from '@/lib/react-query/queries'
+import { toast } from '@/hooks/use-toast'
 
 type props = {
   appear: 'form' | 'edit' | 'reply'

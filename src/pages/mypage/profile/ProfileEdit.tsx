@@ -1,8 +1,13 @@
-import * as z from 'zod'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
+import { UserInfoDto } from '@/types/Dto'
+import { useAuthStore } from '@/lib/zustand/store'
+import { useUpdateUserInfo } from '@/lib/react-query/queries'
 import { ProfileValidation } from '@/lib/validation'
+import { toast } from '@/hooks/use-toast'
 import {
   Form,
   FormControl,
@@ -11,15 +16,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Loader } from '@/components/index'
-import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui'
-import { ModifyUserInfo, UserInfoDto } from '@/types/Dto'
-import { useAuthStore } from '@/lib/zustand/store'
-import { useUpdateUserInfo } from '@/lib/react-query/queries'
-import { toast } from '@/hooks/use-toast'
+import { Button } from '@/components/ui/button'
 
 export default function ProfileEdit() {
   const navigate = useNavigate()
@@ -40,7 +38,6 @@ export default function ProfileEdit() {
 
   const handleSubmit = async (data: z.infer<typeof ProfileValidation>) => {
     const { nickname } = data
-    console.log('username', userinfo.username, nickname)
 
     await updateUserInfoAsync({
       username: userinfo.username,

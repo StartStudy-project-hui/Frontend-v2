@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HtmlEditor } from '@/components'
-import { Button } from '@/components/ui'
-import { Input } from '@/components/ui/input'
+
 import { useAuthStore } from '@/lib/zustand/store'
 import { sanitizeContent } from '@/lib/utils'
 import { useCreatePost } from '@/lib/react-query/queries'
 import { toast } from '@/hooks/use-toast'
-import KakaoMap from '@/components/KakaoMap'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { HtmlEditor, KakaoMap } from '@/components'
 
 const PostCategoryList = [
   {

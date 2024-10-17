@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+
 import { toast } from '@/hooks/use-toast'
 
 const queryClient = new QueryClient({

@@ -1,5 +1,5 @@
-import { Flag, Home } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { Flag, Home } from 'lucide-react'
 
 export default function CustomError() {
   return (

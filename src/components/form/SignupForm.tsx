@@ -8,6 +8,11 @@ import { SignupRequestDto } from '@/types/Dto'
 import { useAuthStore } from '@/lib/zustand/store'
 import { SignupValidation } from '@/lib/validation'
 import {
+  useGetUserInfo,
+  useSignInAccount,
+  useSignUpAccount,
+} from '@/lib/react-query/queries'
+import {
   Form,
   FormControl,
   FormField,
@@ -15,14 +20,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Loader } from '@/components/index'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui'
-import {
-  useGetUserInfo,
-  useSignInAccount,
-  useSignUpAccount,
-} from '@/lib/react-query/queries'
+import { Button } from '@/components/ui/button'
 
 type props = {
   handleTarget: (_target: '회원가입' | '로그인' | null) => void

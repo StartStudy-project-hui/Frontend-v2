@@ -1,10 +1,11 @@
-import CommentForm from '@/components/CommentForm'
-import { toast } from '@/hooks/use-toast'
-import { useDeleteCommentById } from '@/lib/react-query/queries'
+import { useState } from 'react'
+
+import { BoardDetailDto, PureReplyDto, ReplyDto } from '@/types/Dto'
 import { formatDate } from '@/lib/utils'
 import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
-import { BoardDetailDto, PureReplyDto, ReplyDto } from '@/types/Dto'
-import { useState } from 'react'
+import { useDeleteCommentById } from '@/lib/react-query/queries'
+import { toast } from '@/hooks/use-toast'
+import CommentForm from '@/components/CommentForm'
 
 type props = {
   boardId: string
@@ -23,7 +24,6 @@ export default function Comment({ boardId, boardData }: props) {
 
   const handleDelete = async (replyId: string) => {
     const res = await deleteCommentAsync(replyId)
-    console.log('comment D:', res)
     setTrigger()
     toast({
       title: '댓글이 삭제되었습니다',

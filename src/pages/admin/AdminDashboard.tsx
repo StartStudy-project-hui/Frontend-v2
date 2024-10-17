@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom'
+import { UserRoundCog } from 'lucide-react'
 
 import { useAuthStore } from '@/lib/zustand/store'
-import { UserCog, UserRoundCog } from 'lucide-react'
 
 export default function AdminDashboard() {
   const userinfo = useAuthStore((state) => state.userinfo)

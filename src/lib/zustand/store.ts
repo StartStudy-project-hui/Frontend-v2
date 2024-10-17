@@ -1,7 +1,8 @@
-import { removeAccessToken, removeRefreshToken } from '@/lib/utils'
-import { UserInfoDto } from '@/types/Dto'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+
+import { UserInfoDto } from '@/types/Dto'
+import { removeAccessToken, removeRefreshToken } from '@/lib/utils'
 
 type AuthStore = {
   isAuthenticated: boolean

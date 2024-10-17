@@ -1,5 +1,6 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { AdminPageList, MyPageList } from '@/constants'
+
+import { AdminPageList } from '@/constants'
 
 export default function DashboardLayout() {
   const { pathname } = useLocation()

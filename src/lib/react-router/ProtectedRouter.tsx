@@ -1,7 +1,8 @@
-import { toast } from '@/hooks/use-toast'
-import { useAuthStore } from '@/lib/zustand/store'
 import { useEffect } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
+
+import { useAuthStore } from '@/lib/zustand/store'
+import { toast } from '@/hooks/use-toast'
 
 export default function ProtectedRouter() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)

@@ -27,26 +27,11 @@ export function sanitizeContent(content: string) {
 }
 
 /* 쿠키 & 토큰 */
-
 interface CookieOptions {
   path: string
 }
 
 const cookies = new Cookies()
-
-export const setNickName = (nickName: string) => {
-  removeNickName()
-  localStorage.setItem('nickName', nickName)
-}
-
-export const getNickName = () => {
-  const nickName = localStorage.getItem('nickName')
-  return nickName
-}
-
-export const removeNickName = () => {
-  localStorage.removeItem('nickName')
-}
 
 export const setCookie = (
   name: string,
@@ -94,11 +79,6 @@ export const getRefreshTokenatCookie = () => {
   return refreshToken
 }
 
-export const getUserId = () => {
-  const userId = Number(localStorage.getItem('userId'))
-  return userId
-}
-
 export const removeAccessToken = () => {
   localStorage.removeItem('accessToken')
 }
@@ -110,43 +90,3 @@ export const removeRefreshToken = () => {
 export const removeRefreshTokenAtCookie = () => {
   removeCookie('refreshToken')
 }
-
-// interface DecodedToken {
-//   exp: number;
-// }
-
-// export const getTokenExpiration = (tokenName: string) => {
-//   const token = tokenName === "refreshToken" ? getRefreshToken() : tokenName === "accessToken" ? getAccessToken() : null;
-//   let expirationTime = new Date();
-
-//   if (token) {
-//     try {
-
-//       const decoded = jwtDecode(token) as DecodedToken;
-//       console.log(decoded);
-
-//       if (decoded && decoded.exp) {
-//         expirationTime = new Date(decoded.exp * 1000);
-//         console.log(`${tokenName} 만료시간:`, expirationTime);
-//         const offset = 9 * 60;
-//         expirationTime.setMinutes(expirationTime.getMinutes() + offset);
-//         console.log(`${tokenName} 만료시간:`, expirationTime.toISOString());
-//       } else {
-//         console.log("잘못된 토큰.");
-//       }
-//     } catch (err: unknown) {
-//       if (err instanceof Error) {
-//         console.log("잘못된 토큰:", err.message);
-//       } else {
-//         console.log("알수없는 에러");
-//       }
-//     }
-//   }else {
-//     console.log(`${tokenName} 없음.`);
-//   }
-//   tokenName === "refreshToken"
-//     ? setCookie("refreshTokenExpire", expirationTime.toISOString(), { path: "/" })
-//     : tokenName === "accessToken"
-//     ? localStorage.setItem("accessTokenExpire", expirationTime.toISOString())
-//     : null;
-// };

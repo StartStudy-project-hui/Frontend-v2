@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+
 import {
   Pagination as Paging,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { useSearchParams } from 'react-router-dom'
 
 type props = {
   totalPages: number

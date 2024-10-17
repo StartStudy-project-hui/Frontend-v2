@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Search } from 'lucide-react'
-import { CategoryList, ConnectionTypes, OrderList } from '@/constants'
-import { Button } from '@/components/ui'
-import { BoardListItem, Pagination } from '@/components'
 import {
   ScrollRestoration,
   useNavigate,
   useSearchParams,
 } from 'react-router-dom'
-import { toast } from '@/hooks/use-toast'
-import { BoardResponseDto } from '@/types/Dto'
+
 import { useAuthStore } from '@/lib/zustand/store'
 import { useGetPosts } from '@/lib/react-query/queries'
+import { toast } from '@/hooks/use-toast'
+import { CategoryList, ConnectionTypes, OrderList } from '@/constants'
+import { Button } from '@/components/ui/button'
+import { BoardListItem, Pagination } from '@/components'
 
 export default function Home() {
   const navigate = useNavigate()

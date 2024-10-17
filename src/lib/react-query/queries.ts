@@ -1,4 +1,18 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
+
+import {
+  AddCommentRequestDto,
+  BoardRequestDto,
+  DeletePostInfo,
+  EditCommentRequestDto,
+  ModifyPostInfo,
+  ModifyRecruitInfo,
+  ModifyUserInfo,
+  SigninInfo,
+  SignupRequestDto,
+  UserListRequestInfo,
+  WritePostRequestDto,
+} from '@/types/Dto'
 import {
   createComment,
   createPost,
@@ -23,19 +37,6 @@ import {
   updateUserInfo,
 } from '@/lib/axios/api'
 import { QUERY_KEYS } from '@/lib/react-query/queryKeys'
-import {
-  AddCommentRequestDto,
-  BoardRequestDto,
-  DeletePostInfo,
-  EditCommentRequestDto,
-  ModifyPostInfo,
-  ModifyRecruitInfo,
-  ModifyUserInfo,
-  SigninInfo,
-  SignupRequestDto,
-  UserListRequestInfo,
-  WritePostRequestDto,
-} from '@/types/Dto'
 
 export const useSignUpAccount = () => {
   return useMutation({

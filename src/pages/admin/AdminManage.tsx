@@ -1,10 +1,10 @@
-import { Pagination } from '@/components'
-import { Button } from '@/components/ui'
-import { useGetUsersFromAdmin } from '@/lib/react-query/queries'
-import { UserResponseDto } from '@/types/Dto'
-import { Search } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { Search } from 'lucide-react'
+
+import { useGetUsersFromAdmin } from '@/lib/react-query/queries'
+import { Pagination } from '@/components'
+import { Button } from '@/components/ui/button'
 
 export default function AdminManage() {
   const [searchParams, setSearchParams] = useSearchParams()

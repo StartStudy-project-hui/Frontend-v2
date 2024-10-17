@@ -10,7 +10,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { SigininForm, SignupForm } from '@/components/form'
-import { cn } from '@/lib/utils'
 
 type props = {
   target?: '회원가입' | '로그인' | null

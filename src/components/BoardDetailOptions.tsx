@@ -1,4 +1,8 @@
-import { toast } from '@/hooks/use-toast'
+import { useRef, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Pencil, Star, Trash2 } from 'lucide-react'
+
+import { BoardDetailDto } from '@/types/Dto'
 import {
   useDeletePost,
   useDeletePostFromAdmin,
@@ -6,10 +10,7 @@ import {
   useUnlikePostById,
 } from '@/lib/react-query/queries'
 import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
-import { BoardDetailDto } from '@/types/Dto'
-import { Pencil, Star, Trash2 } from 'lucide-react'
-import { useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { toast } from '@/hooks/use-toast'
 
 type props = {
   boardId: string
