@@ -32,9 +32,11 @@ jobs:
           SOURCE_DIR: "dist"
 
       - name: S3 기존 파일들 전체 삭제 후 새로 업로드
+        env : 
+          BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME}}
         run: |
-          aws s3 rm s3://startstudy-web --recursive
-          aws s3 cp ./build s3://startstudy-web/ --recursive
+          aws s3 rm s3://$BUCKET_NAME --recursive
+          aws s3 cp ./build s3://$BUCKET_NAME/ --recursive
 
       - name: CloudFront 캐시 무효화
         env : 
