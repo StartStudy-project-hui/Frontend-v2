@@ -39,7 +39,7 @@ jobs:
 
       - name: CloudFront 캐시 무효화
         env : 
-          CLOUD_FRONT_ID: ${{ secrets.AWS_CLOUDFRONT_ID}}
+          CLOUD_FRONT_ID: ${{ secrets.CLOUD_FRONT_ID}}
         run: |
           echo "CloudFront ID: $CLOUD_FRONT_ID" # 확인용 로그
           aws cloudfront create-invalidation --distribution-id $CLOUD_FRONT_ID --paths "/*"
