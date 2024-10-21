@@ -18,11 +18,10 @@ jobs:
       - name: Install npm dependencies
         run: | 
           npm install
-          vite build
-        
-      - name: React build
-        run: vite build
-         
+          
+      - name: Build project
+        run: npx vite build
+                 
       - name: AWS Resource에 접근할 수 있게 AWS credentials 설정
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -36,7 +35,7 @@ jobs:
           BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME}}
         run: |
           aws s3 rm s3://$BUCKET_NAME --recursive
-          aws s3 cp ./build s3://$BUCKET_NAME/ --recursive
+          aws s3 cp ./dist s3://$BUCKET_NAME/ --recursive
 
       - name: CloudFront 캐시 무효화
         env : 
