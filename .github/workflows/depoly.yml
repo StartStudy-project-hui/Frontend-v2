@@ -16,6 +16,26 @@ jobs:
       - name: Create .env file
         run: echo ${{ secrets.ENV }} | base64 --decode > ./.env
 
+      - name: Verify .env file contents
+        run: |
+          echo "Checking .env variables..."
+          source .env
+          echo "VITE_BASE_URL is set to $VITE_BASE_URL"
+          echo "VITE_KAKAO_KEY is set to [REDACTED]" # 보안을 위해 키는 숨깁니다.
+          
+          # 변수 존재 여부 체크
+          if [ -z "$VITE_BASE_URL" ]; then
+            echo "VITE_BASE_URL is not set"
+            exit 1
+          fi
+          
+          if [ -z "$VITE_KAKAO_KEY" ]; then
+            echo "VITE_KAKAO_KEY is not set"
+            exit 1
+          fi
+
+
+
       - name: Install npm dependencies
         run: | 
           npm install
