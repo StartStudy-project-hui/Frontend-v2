@@ -22,44 +22,31 @@ jobs:
           source .env
           echo "VITE_BASE_URL is set to $VITE_BASE_URL"
           echo "VITE_KAKAO_KEY is set to [REDACTED]" # 보안을 위해 키는 숨깁니다.
-          
-          # 변수 존재 여부 체크
-          if [ -z "$VITE_BASE_URL" ]; then
-            echo "VITE_BASE_URL is not set"
-            exit 1
-          fi
-          
-          if [ -z "$VITE_KAKAO_KEY" ]; then
-            echo "VITE_KAKAO_KEY is not set"
-            exit 1
-          fi
-
-
-
+         
       - name: Install npm dependencies
         run: | 
           npm install
           
       - name: Build project
         run: npx vite build
-                 
-      - name: AWS Resource에 접근할 수 있게 AWS credentials 설정
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ap-northeast-2
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          SOURCE_DIR: "dist"
 
-      - name: S3 기존 파일들 전체 삭제 후 새로 업로드
-        env : 
-          BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME}}
-        run: |
-          aws s3 rm s3://$BUCKET_NAME --recursive
-          aws s3 cp ./dist s3://$BUCKET_NAME/ --recursive
-      - name: CloudFront 캐시 무효화
-        env : 
-          CLOUD_FRONT_ID: ${{ secrets.CLOUD_FRONT_ID}}
-        run: |
-          echo "CloudFront ID: $CLOUD_FRONT_ID" # 확인용 로그
-          aws cloudfront create-invalidation --distribution-id $CLOUD_FRONT_ID --paths "/*"
+      - name: Upload S3 bucket
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.DEV_AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'ap-northeast-2'
+          SOURCE_DIR: 'dist'
+          DEST_DIR: 'dist'
+          
+      - name: Invalidate CloudFront
+        uses: chetan/invalidate-cloudfront-action@master
+        env:
+          PATHS: '/*'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'ap-northeast-2'
+          DISTRIBUTION:  ${{ secrets.CLOUD_FRONT_ID}}
