@@ -15,6 +15,10 @@ jobs:
       - name: Create .env file
         run: echo ${{ secrets.ENV }} | base64 --decode > ./.env
 
+      - name: Check Node v            
+        run: node -v
+
+
       - name: Install npm dependencies
         run: | 
           npm install
@@ -28,7 +32,6 @@ jobs:
           aws-region: ap-northeast-2
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          SOURCE_DIR: "dist"
 
       - name: S3 기존 파일들 전체 삭제 후 새로 업로드
         env : 
