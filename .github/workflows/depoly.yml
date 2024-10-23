@@ -1,44 +1,45 @@
-name: Build
+
+name: Deploy To S3
+
 on:
   push:
     branches:
-      - master #빌드하고싶은 브랜치
+      - main
+
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-
     steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Create env file
-        run: |
-          touch .env
-          echo VITE_BASE_URL=${{ secrets.VITE_BASE_URL }} >> .env
-          echo VITE_BASE_URL=${{ secrets.VITE_KAKAO_KEY }} >> .env
+      - name: GitHub Repository 파일 불러오기
+        uses: actions/checkout@v4
 
-          cat .env
-      - name: Yarn Install
+      - name: Create .env file
+        run: echo ${{ secrets.ENV }} | base64 --decode > ./.env
+
+      - name: Verify .env file contents
         run: |
-          yarn install
-      - name: Yarn Build
-        run: |
-          yarn build
-      - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --delete
-        env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_NAME }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-          SOURCE_DIR: "dist"
+          echo "Checking .env variables..."
+          source .env
+          echo "VITE_BASE_URL is set to $VITE_BASE_URL"
+          echo "VITE_KAKAO_KEY is set to [REDACTED]" # 보안을 위해 키는 숨깁니다.
+          
+          # 변수 존재 여부 체크
+          if [ -z "$VITE_BASE_URL" ]; then
+            echo "VITE_BASE_URL is not set"
+            exit 1
+          fi
+          
+          if [ -z "$VITE_KAKAO_KEY" ]; then
+            echo "VITE_KAKAO_KEY is not set"
+            exit 1
+          fi
+      - name: Install npm dependencies
+        run: | 
+          npm install
+          
+      - name: Build project
+        run: npx vite build
+                 
       - name: AWS Resource에 접근할 수 있게 AWS credentials 설정
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -46,6 +47,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SOURCE_DIR: "dist"
+
+      - name: S3 기존 파일들 전체 삭제 후 새로 업로드
+        env : 
+          BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME}}
+        run: |
+          aws s3 rm s3://$BUCKET_NAME --recursive
+          aws s3 cp ./ s3://$BUCKET_NAME/ --recursive
       - name: CloudFront 캐시 무효화
         env : 
           CLOUD_FRONT_ID: ${{ secrets.CLOUD_FRONT_ID}}
