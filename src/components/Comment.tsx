@@ -73,7 +73,7 @@ export default function Comment({ boardId, boardData }: props) {
                   <div className='text-gray-500'>
                     {formatDate(comment.updateTime)}
                   </div>
-                  {userinfo?.email === comment.nickname && (
+                  {userinfo?.nickname === comment.nickname && (
                     <div className='flex gap-2'>
                       <button onClick={() => setEditId(comment.replyId!)}>
                         수정
@@ -124,7 +124,7 @@ export default function Comment({ boardId, boardData }: props) {
                         <div className='text-gray-500'>
                           {formatDate(reply.updateTime)}
                         </div>
-                        {userinfo?.email === reply.nickname && (
+                        {userinfo?.nickname === reply.nickname && (
                           <div className='flex gap-2'>
                             <button onClick={() => setEditId(reply.replyId!)}>
                               수정
