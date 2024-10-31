@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Pencil, Star, Trash2 } from 'lucide-react'
 
@@ -38,6 +38,10 @@ export default function BoardDetailOptions({ boardId, boardData }: props) {
     mutateAsync: deletePostFromAdminAsync,
     isPending: isDeletingPostFromAdmin,
   } = useDeletePostFromAdmin()
+
+  useEffect(() => {
+    setIsFavorite(boardData.postLike === '관심 완료')
+  }, [boardData])
 
   const toggleBoardFavorites = async () => {
     if (boardId) {
