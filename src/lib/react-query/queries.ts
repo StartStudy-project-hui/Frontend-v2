@@ -60,6 +60,7 @@ export const useGetPosts = (requestBody: BoardRequestDto) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_POSTS],
     queryFn: () => getPosts(requestBody),
+    enabled: false,
   })
 }
 
@@ -73,6 +74,7 @@ export const useGetPostById = (boardId?: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_POST_BY_ID],
     queryFn: () => getPostById(boardId),
+    enabled: false,
   })
 }
 
@@ -98,6 +100,7 @@ export const useGetUserPosts = (data: UserListRequestInfo) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_USER_POSTS],
     queryFn: () => getUserPosts(data),
+    enabled: false,
   })
 }
 
@@ -119,6 +122,7 @@ export const useGetLikedPosts = (data: UserListRequestInfo) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_LIKED_POSTS],
     queryFn: () => getLikedPosts(data),
+    enabled: false,
   })
 }
 
@@ -174,6 +178,7 @@ export const useGetUsersFromAdmin = ({
   return useQuery({
     queryKey: [QUERY_KEYS.GET_USERS_FROM_ADMIN],
     queryFn: () => getUsersInfoFromAdmin({ username, page }),
+    enabled: false,
   })
 }
 
