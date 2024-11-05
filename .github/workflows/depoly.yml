@@ -34,8 +34,7 @@ jobs:
         env : 
           BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME}}
         run: |
-          aws s3 rm s3://$BUCKET_NAME --recursive
-          aws s3 cp ./dist s3://$BUCKET_NAME/ --recursive
+          aws s3 sync ./dist s3://$BUCKET_NAME --delete
       - name: CloudFront 캐시 무효화
         env : 
           CLOUD_FRONT_ID: ${{ secrets.CLOUD_FRONT_ID}}
