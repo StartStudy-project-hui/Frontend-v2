@@ -173,7 +173,7 @@ export default function KakaoMap({ targetCoords, setCoords }: props = {}) {
         map.setBounds(bounds)
       }
     })
-  }, [searchToggle])
+  }, [searchToggle, targetCoords])
 
   const handleSearch = () => {
     setSearchToggle(!searchToggle)
