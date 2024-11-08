@@ -25,8 +25,30 @@ import {
   setAccessToken,
   setRefreshToken,
 } from '@/lib/utils'
+import { useAuthStore } from '@/lib/zustand/store'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
+
+axios.interceptors.response.use(
+  function (response) {
+    return response
+  },
+  async function (error) {
+    if (error.response && error.response.status === 401) {
+      try {
+        const res = await renewToken()
+        const accessToken = res.headers.access_token
+        setAccessToken(accessToken)
+        const config = error.config
+        return axios(userConfig(config))
+      } catch (error) {
+        useAuthStore.getState().clearAuthStore()
+        location.href = '/'
+        return Promise.reject(error)
+      }
+    }
+  }
+)
 
 const publicConfig = (_config: AxiosRequestConfig) => {
   const config = {
@@ -56,6 +78,19 @@ const userConfig = (_config: AxiosRequestConfig) => {
   }
 
   return config
+}
+
+// ==============================
+/* 토큰 재발급 */
+// ==============================
+export const renewToken = async () => {
+  const config = userConfig({
+    url: '/renew-token',
+    method: 'POST',
+  })
+  const axiosInstance = axios.create()
+  const res = await axiosInstance(config)
+  return res
 }
 
 // ==============================
