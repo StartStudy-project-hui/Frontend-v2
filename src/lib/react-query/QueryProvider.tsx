@@ -7,6 +7,7 @@ import { toast } from '@/hooks/use-toast'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      retry: false,
       throwOnError(error, query) {
         if (axios.isAxiosError(error)) {
           if (error.response) {
