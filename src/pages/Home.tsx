@@ -76,7 +76,7 @@ export default function Home() {
     setConnectionTypeId(id)
   }
 
-  const handldePageChange = (pageNum: number) => {
+  const handlePageChange = (pageNum: number) => {
     searchParams.set('page', (pageNum - 1).toString())
     setSearchParams(searchParams)
   }
@@ -188,7 +188,7 @@ export default function Home() {
             </div>
             <Pagination
               totalPages={boardResponse.totalPages}
-              handlePageChange={handldePageChange}
+              handlePageChange={handlePageChange}
             />
           </>
         )}

@@ -63,7 +63,7 @@ export default function Posts() {
     setConnectionTypeId(id)
   }
 
-  const handldePageChange = (pageNum: number) => {
+  const handlePageChange = (pageNum: number) => {
     searchParams.set('page', (pageNum - 1).toString())
     setSearchParams(searchParams)
   }
@@ -147,7 +147,7 @@ export default function Posts() {
           </div>
           <Pagination
             totalPages={boardResponse.totalPages}
-            handlePageChange={handldePageChange}
+            handlePageChange={handlePageChange}
           />
         </>
       )}

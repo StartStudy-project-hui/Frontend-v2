@@ -35,7 +35,7 @@ export default function AdminManage() {
     setSearchParams(searchParams, { preventScrollReset: true })
   }
 
-  const handldePageChange = (pageNum: number) => {
+  const handlePageChange = (pageNum: number) => {
     searchParams.set('page', (pageNum - 1).toString())
     setSearchParams(searchParams)
   }
@@ -106,7 +106,7 @@ export default function AdminManage() {
           {userResponse && (
             <Pagination
               totalPages={userResponse.totalPages}
-              handlePageChange={handldePageChange}
+              handlePageChange={handlePageChange}
             />
           )}
         </div>
