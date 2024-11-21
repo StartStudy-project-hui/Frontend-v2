@@ -1,18 +1,46 @@
+import Cookie from 'js-cookie';
 import { Link, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react';
 
 import { useAuthStore } from '@/lib/zustand/store'
 import { Modal } from '@/components'
+import { useGetUserInfo } from '@/lib/react-query/queries'
+import { setAccessToken, setRefreshToken } from '@/lib/utils';
 
 export default function Header() {
   const navigate = useNavigate()
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const userInfo = useAuthStore((state) => state.userinfo)
   const clearAuthStore = useAuthStore((state) => state.clearAuthStore)
+  const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated)
+  const setUserInfo = useAuthStore((state) => state.setUserInfo)
+
+  const { refetch: fetchUserInfo } = useGetUserInfo(false)
 
   const handleSignOut = async () => {
     clearAuthStore()
   }
+    
+  const handleLoginCheck = async () => {
+    const accessToken = Cookie.get("Access_Token");
+    const refreshToken = Cookie.get("Refresh_Token");
 
+    if (accessToken && refreshToken) {
+      setAccessToken(accessToken);
+      setRefreshToken(refreshToken);
+
+      localStorage.setItem('accessToken', accessToken)
+      localStorage.setItem('refreshToken', refreshToken)
+
+      const { data: userInfoData } = await fetchUserInfo()
+      setUserInfo(userInfoData!)
+      setIsAuthenticated({ isAuthenticated: true })
+    }
+  }
+
+  useEffect(() => {
+    handleLoginCheck()
+  }); 
   return (
     <header className='flex justify-between items-center px-5 py-3'>
       <div></div>

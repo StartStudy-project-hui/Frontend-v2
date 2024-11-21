@@ -26,6 +26,7 @@ import {
   setRefreshToken,
 } from '@/lib/utils'
 import { useAuthStore } from '@/lib/zustand/store'
+import Cookies from 'js-cookie'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -42,6 +43,8 @@ axios.interceptors.response.use(
         const config = error.config
         return axios(userConfig(config))
       } catch (error) {
+        Cookies.remove('Access_Token');
+        Cookies.remove('Refresh_Token');
         useAuthStore.getState().clearAuthStore()
         location.href = '/'
         return Promise.reject(error)
