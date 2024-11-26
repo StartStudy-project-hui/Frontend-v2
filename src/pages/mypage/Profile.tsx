@@ -24,7 +24,7 @@ export default function Page() {
                 <span className='text-lg text-gray-500'>{userinfo?.email}</span>
               </div>
               <div>
-                <span className='text-xl font-bold'>{userinfo?.nickname}</span>
+                <span className='text-xl font-bold'>{userinfo?.nickname} | {userinfo?.socialType}</span>
               </div>
             </div>
             <Link

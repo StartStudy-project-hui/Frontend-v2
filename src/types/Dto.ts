@@ -201,6 +201,7 @@ export interface UserInfoDto {
   nickname: string
   email: string
   role: string
+  socialType: 'KAKAO' | 'NAVER'
 }
 
 export interface ModifyUserInfo {
@@ -217,6 +218,7 @@ export interface RetrievedUserInfo {
   nickname: string
   email: string
   role: string
+  socialType: 'KAKAO' | 'NAVER'
 }
 
 export interface UserResponseDto {

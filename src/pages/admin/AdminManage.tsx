@@ -84,6 +84,9 @@ export default function AdminManage() {
                 <th scope='col' className='px-6 py-3'>
                   권한
                 </th>
+                <th scope='col' className='px-6 py-3'>
+                  가빙 방법
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -99,6 +102,7 @@ export default function AdminManage() {
                   <td className='px-6 py-4'>{item.username}</td>
                   <td className='px-6 py-4'>{item.nickname}</td>
                   <td className='px-6 py-4'>{item.role}</td>
+                  <td className='px-6 py-4'>{item.socialType}</td>
                 </tr>
               ))}
             </tbody>
