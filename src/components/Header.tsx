@@ -25,12 +25,14 @@ export default function Header() {
     const accessToken = Cookie.get("Access_Token");
     const refreshToken = Cookie.get("Refresh_Token");
 
-    if (accessToken && refreshToken) {
-      setAccessToken(accessToken);
-      setRefreshToken(refreshToken);
+    console.log(accessToken, refreshToken);
 
-      localStorage.setItem('accessToken', accessToken)
-      localStorage.setItem('refreshToken', refreshToken)
+    if (accessToken && refreshToken) {
+      setAccessToken('Bearer ' + accessToken);
+      setRefreshToken('Bearer ' + refreshToken);
+
+      localStorage.setItem('accessToken', 'Bearer ' + accessToken)
+      localStorage.setItem('refreshToken', 'Bearer ' + refreshToken)
 
       const { data: userInfoData } = await fetchUserInfo()
       setUserInfo(userInfoData!)
@@ -40,7 +42,7 @@ export default function Header() {
 
   useEffect(() => {
     handleLoginCheck()
-  }); 
+  }, []); 
   return (
     <header className='flex justify-between items-center px-5 py-3'>
       <div></div>
