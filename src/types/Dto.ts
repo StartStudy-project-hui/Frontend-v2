@@ -201,7 +201,7 @@ export interface UserInfoDto {
   nickname: string
   email: string
   role: string
-  socialType: 'KAKAO' | 'NAVER'
+  socialType: 'KAKAO' | 'NAVER' | ''
 }
 
 export interface ModifyUserInfo {

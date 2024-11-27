@@ -5,7 +5,7 @@ import { useAuthStore } from '@/lib/zustand/store'
 
 export default function Page() {
   const userinfo = useAuthStore((state) => state.userinfo)
-
+  console.log(userinfo);
   return (
     <>
       <div className='w-full'>

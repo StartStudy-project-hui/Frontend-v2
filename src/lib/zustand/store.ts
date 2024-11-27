@@ -12,7 +12,7 @@ type AuthStore = {
   }: {
     isAuthenticated: boolean
   }) => void
-  setUserInfo: ({ username, email, nickname, role }: UserInfoDto) => void
+  setUserInfo: ({ username, email, nickname, role, socialType }: UserInfoDto) => void
   clearAuthStore: () => void
 }
 
@@ -25,17 +25,19 @@ export const useAuthStore = create<AuthStore>()(
         nickname: '',
         email: '',
         role: '',
+        socialType: '',
       },
       setIsAuthenticated: ({ isAuthenticated }) => {
         set({ isAuthenticated })
       },
-      setUserInfo: ({ username, email, nickname, role }) => {
+      setUserInfo: ({ username, email, nickname, role, socialType }) => {
         set({
           userinfo: {
             username,
             email,
             nickname,
             role,
+            socialType,
           },
         })
       },
