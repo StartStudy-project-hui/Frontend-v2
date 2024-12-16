@@ -20,6 +20,7 @@ import {
   deletePost,
   deletePostFromAdmin,
   getAdminDashboard,
+  getCommentByBoardId,
   getLikedPosts,
   getPostById,
   getPosts,
@@ -122,6 +123,14 @@ export const useGetLikedPosts = (data: UserListRequestInfo) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_LIKED_POSTS],
     queryFn: () => getLikedPosts(data),
+    enabled: false,
+  })
+}
+
+export const useGetCommentsByBoardId = (boardId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_COMMENTS],
+    queryFn: () => getCommentByBoardId(boardId),
     enabled: false,
   })
 }

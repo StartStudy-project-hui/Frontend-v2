@@ -17,15 +17,13 @@ export default function BoardDetail() {
 
   const {
     data: boardData,
-    isPending,
     refetch: fetchPostDetail,
   } = useGetPostById(boardId)
-  const { mutateAsync: updateRecruitAsync, isPending: isUpdatingRecruit } =
-    useUpdateRecruit()
+  const { mutateAsync: updateRecruitAsync } = useUpdateRecruit()
 
   useEffect(() => {
     fetchPostDetail()
-  }, [trigger])
+  }, [fetchPostDetail, trigger])
 
   const toggleRecruit = async () => {
     if (boardId) {
@@ -77,9 +75,7 @@ export default function BoardDetail() {
               <BoardDetailOptions boardId={boardId} boardData={boardData} />
             </div>
           </div>
-
           <hr className='my-5 border-gray-300' />
-
           <section className='my-10 min-h-48'>
             <div
               className='reset-all'
@@ -106,7 +102,7 @@ export default function BoardDetail() {
             <div className='flex gap-2 my-5'>
               <span className='font-bold'>댓글</span>
               <span className='font-bold'>
-                {boardData.replyResponseDto.getTotal}
+                {boardData.replyResponseDto?.getTotal}
               </span>
             </div>
             <Comment boardId={boardId!} boardData={boardData} />
