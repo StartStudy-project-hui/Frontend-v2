@@ -57,12 +57,13 @@ export default function Comment({ boardId, boardData }: props) {
 
     return pureReplyArray
   }
-
+  
+  const replie2 = [] as any[];
   return (
     <div>
       <CommentForm appear='form' boardId={boardId!} action='create' />
       <ul className='flex flex-col gap-8 mt-5'>
-        {boardData.replyResponseDto.replies.map((comment) => {
+        {replie2.map((comment) => {
           const replies = pureReplies(comment.children)
 
           return (
