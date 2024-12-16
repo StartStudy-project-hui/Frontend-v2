@@ -28,7 +28,7 @@ import {
 import { useAuthStore } from '@/lib/zustand/store'
 import Cookies from 'js-cookie'
 
-const BASE_URL = '/api' // import.meta.env.VITE_BASE_URL
+const BASE_URL = import.meta.env.VITE_BASE_URL
 
 axios.interceptors.response.use(
   function (response) {
@@ -282,14 +282,6 @@ export const getLikedPosts = async (
 // ==============================
 /* 댓글 */
 // ==============================
-export const getCommentByBoardId = async (boardId: string) => {
-  const config = userConfig({
-    url: `/reply/view/${boardId}`,
-    method: 'GET',
-  })
-  const res = await axios(config)
-  return res.data
-}
 export const createComment = async (data: AddCommentRequestDto) => {
   const config = userConfig({
     url: `/reply`,
