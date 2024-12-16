@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { BoardDetailDto, PureReplyDto, ReplyDto } from '@/types/Dto'
 import { formatDate } from '@/lib/utils'
 import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
-import { useDeleteCommentById } from '@/lib/react-query/queries'
+import { useDeleteCommentById, useGetCommentsByBoardId, useGetPostById } from '@/lib/react-query/queries'
 import { toast } from '@/hooks/use-toast'
 import CommentForm from '@/components/CommentForm'
 
@@ -15,9 +15,20 @@ type props = {
 export default function Comment({ boardId, boardData }: props) {
   const setTrigger = useTriggerStore((state) => state.setTrigger)
   const userinfo = useAuthStore((state) => state.userinfo)
+  const trigger = useTriggerStore((state) => state.trigger)
 
   const [editId, setEditId] = useState('')
   const [parentId, setParentId] = useState('')
+
+  const {
+    data: commentData,
+    refetch: fetchComments,
+  } = useGetCommentsByBoardId(boardId)
+
+
+  useEffect(() => {
+    fetchComments()
+  }, [fetchComments, trigger])
 
   const { mutateAsync: deleteCommentAsync, isPending: isDeletingComment } =
     useDeleteCommentById()
@@ -57,13 +68,12 @@ export default function Comment({ boardId, boardData }: props) {
 
     return pureReplyArray
   }
-  
-  const replie2 = [] as any[];
+
   return (
     <div>
       <CommentForm appear='form' boardId={boardId!} action='create' />
       <ul className='flex flex-col gap-8 mt-5'>
-        {replie2.map((comment) => {
+        {commentData?.replies && commentData.replies.map((comment) => {
           const replies = pureReplies(comment.children)
 
           return (

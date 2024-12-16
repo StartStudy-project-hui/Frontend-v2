@@ -21,7 +21,6 @@ export default function BoardDetail() {
   } = useGetPostById(boardId)
   const { mutateAsync: updateRecruitAsync } = useUpdateRecruit()
 
-  console.log('data', boardData);
   useEffect(() => {
     fetchPostDetail()
   }, [fetchPostDetail, trigger])
