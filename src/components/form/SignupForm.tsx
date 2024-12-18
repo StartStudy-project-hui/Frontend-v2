@@ -32,12 +32,9 @@ export default function SignupForm({ handleTarget, closeModal }: props) {
   const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated)
   const setUserInfo = useAuthStore((state) => state.setUserInfo)
 
-  const { mutateAsync: signUpAccountAsync, isPending: isSigningUp } =
-    useSignUpAccount()
-  const { mutateAsync: signInAccountAsync, isPending: isSigningIn } =
-    useSignInAccount()
-  const { isPending: isGettingUserInfo, refetch: fetchUserInfo } =
-    useGetUserInfo(false)
+  const { mutateAsync: signUpAccountAsync } = useSignUpAccount()
+  const { mutateAsync: signInAccountAsync } = useSignInAccount()
+  const { refetch: fetchUserInfo } = useGetUserInfo(false)
 
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),

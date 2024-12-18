@@ -28,10 +28,8 @@ export default function SigninForm({ handleTarget, closeModal }: props) {
   const setIsAuthenticated = useAuthStore((state) => state.setIsAuthenticated)
   const setUserInfo = useAuthStore((state) => state.setUserInfo)
 
-  const { mutateAsync: signInAccountAsync, isPending: isSigningIn } =
-    useSignInAccount()
-  const { isPending: isFetchingUserInfo, refetch: fetchUserInfo } =
-    useGetUserInfo(false)
+  const { mutateAsync: signInAccountAsync } = useSignInAccount()
+  const { refetch: fetchUserInfo } = useGetUserInfo(false)
 
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),

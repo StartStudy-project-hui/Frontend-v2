@@ -25,8 +25,6 @@ export default function Home() {
 
   const {
     data: boardResponse,
-    isPending,
-    isError,
     refetch,
   } = useGetPosts({
     title: searchParams.get('title') || undefined,
@@ -39,7 +37,7 @@ export default function Home() {
   useEffect(() => {
     history.scrollRestoration = 'auto'
     refetch()
-  }, [searchParams])
+  }, [refetch, searchParams])
 
   const onSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value)

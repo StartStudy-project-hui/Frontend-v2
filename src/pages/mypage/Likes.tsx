@@ -20,7 +20,6 @@ export default function Posts() {
 
   const {
     data: boardResponse,
-    isPending: isFetchingLikedPosts,
     refetch: fetchLikedPosts,
   } = useGetLikedPosts({
     recruit: searchParams.get('recruit') || '모집중',
@@ -33,7 +32,7 @@ export default function Posts() {
   useEffect(() => {
     history.scrollRestoration = 'auto'
     fetchLikedPosts()
-  }, [searchParams])
+  }, [fetchLikedPosts, searchParams])
 
   const selectCategory = (id: number) => {
     const category = CategoryList.find((item) => item.id === id)!.value
@@ -43,8 +42,8 @@ export default function Posts() {
   }
 
   const selectRecruit = (id: number) => {
-    const recurit = RecruitList.find((item) => item.id === id)!.value
-    searchParams.set('recruit', recurit)
+    const recruit = RecruitList.find((item) => item.id === id)!.value
+    searchParams.set('recruit', recruit)
     setSearchParams(searchParams, { preventScrollReset: true })
     setRecruitId(id)
   }
@@ -53,7 +52,11 @@ export default function Posts() {
     const order = OrderList.find((item) => item.id === id)!.value
     searchParams.set('order', order)
     setSearchParams(searchParams, { preventScrollReset: true })
-    setOrderId(id)
+    if (id) {
+      setOrderId(id)
+    }
+    // ??
+    console.log('orderId', orderId);
   }
 
   const selectConnectionType = (id: number) => {

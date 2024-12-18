@@ -20,7 +20,6 @@ export default function Posts() {
 
   const {
     data: boardResponse,
-    isPending: isFetchingUserPosts,
     refetch: fetchUserPosts,
   } = useGetUserPosts({
     recruit: searchParams.get('recruit') || '모집중',
@@ -33,7 +32,7 @@ export default function Posts() {
   useEffect(() => {
     history.scrollRestoration = 'auto'
     fetchUserPosts()
-  }, [searchParams])
+  }, [fetchUserPosts, searchParams])
 
   const selectCategory = (id: number) => {
     const category = CategoryList.find((item) => item.id === id)!.value
@@ -54,6 +53,8 @@ export default function Posts() {
     searchParams.set('order', order)
     setSearchParams(searchParams, { preventScrollReset: true })
     setOrderId(id)
+
+    console.log('orderId', orderId)
   }
 
   const selectConnectionType = (id: number) => {

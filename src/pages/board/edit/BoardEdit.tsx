@@ -42,15 +42,14 @@ export default function BoardEdit() {
   const [place, setPlace] = useState('온라인')
   const [coords, setCoords] = useState<number[]>([])
 
-  const { mutateAsync: updatePostAsync, isPending: isUpdatingPost } =
-    useUpdatePost()
+  const { mutateAsync: updatePostAsync } = useUpdatePost()
 
   const handleChangePlace = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (e.target.value === '온라인') setCoords([])
     setPlace(e.target.value)
   }
 
-  const handleCancle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     if (confirm('작성중인 글을 취소하시겠어요?')) {
       navigate(-1)
@@ -136,7 +135,7 @@ export default function BoardEdit() {
         <div className='flex gap-3'>
           <Button
             className='text-black font-bold bg-white hover:bg-transparent'
-            onClick={handleCancle}
+            onClick={handleCancel}
           >
             취소
           </Button>

@@ -282,6 +282,14 @@ export const getLikedPosts = async (
 // ==============================
 /* 댓글 */
 // ==============================
+export const getCommentByBoardId = async (boardId: string) => {
+  const config = userConfig({
+    url: `/reply/view/${boardId}`,
+    method: 'GET',
+  })
+  const res = await axios(config)
+  return res.data
+}
 export const createComment = async (data: AddCommentRequestDto) => {
   const config = userConfig({
     url: `/reply`,
@@ -362,7 +370,7 @@ export const getUsersInfoFromAdmin = async ({
 
 export const getAdminDashboard = async (data: UserListRequestInfo) => {
   const { recruit, category, order } = data
-  const config = userConfig({
+  userConfig({
     url: `/admin/dash-board`,
     method: 'GET',
     params: {

@@ -24,8 +24,7 @@ export default function ProfileEdit() {
   const userinfo = useLocation().state as UserInfoDto
   const setUserInfo = useAuthStore((state) => state.setUserInfo)
 
-  const { mutateAsync: updateUserInfoAsync, isPending: isUpdatingUserInfo } =
-    useUpdateUserInfo()
+  const { mutateAsync: updateUserInfoAsync } = useUpdateUserInfo()
 
   const form = useForm<z.infer<typeof ProfileValidation>>({
     resolver: zodResolver(ProfileValidation),

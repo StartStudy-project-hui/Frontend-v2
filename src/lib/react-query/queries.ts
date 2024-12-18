@@ -135,7 +135,7 @@ export const useGetCommentsByBoardId = (boardId: string) => {
   })
 }
 
-export const useCrerateComment = () => {
+export const useCerateComment = () => {
   return useMutation({
     mutationFn: (data: AddCommentRequestDto) => createComment(data),
   })
