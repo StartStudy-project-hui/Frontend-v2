@@ -28,16 +28,13 @@ export default function BoardDetailOptions({ boardId, boardData }: props) {
     boardData.postLike === '관심 완료'
   )
 
-  const { mutateAsync: deletePostAsync, isPending: isDeletingPost } =
+  const { mutateAsync: deletePostAsync } =
     useDeletePost()
-  const { mutateAsync: likePostAsync, isPending: isFetchingLikePost } =
+  const { mutateAsync: likePostAsync } =
     useLikePostById()
-  const { mutateAsync: unlikePostAsync, isPending: isFetchingUnlikePost } =
+  const { mutateAsync: unlikePostAsync } =
     useUnlikePostById()
-  const {
-    mutateAsync: deletePostFromAdminAsync,
-    isPending: isDeletingPostFromAdmin,
-  } = useDeletePostFromAdmin()
+  const { mutateAsync: deletePostFromAdminAsync } = useDeletePostFromAdmin()
 
   useEffect(() => {
     setIsFavorite(boardData.postLike === '관심 완료')

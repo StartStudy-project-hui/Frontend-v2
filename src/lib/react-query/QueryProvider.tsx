@@ -8,7 +8,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
-      throwOnError(error, query) {
+      throwOnError(error) {
         if (axios.isAxiosError(error)) {
           if (error.response) {
             toast({

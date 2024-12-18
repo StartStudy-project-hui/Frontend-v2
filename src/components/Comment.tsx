@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { BoardDetailDto, PureReplyDto, ReplyDto } from '@/types/Dto'
 import { formatDate } from '@/lib/utils'
 import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
-import { useDeleteCommentById, useGetCommentsByBoardId, useGetPostById } from '@/lib/react-query/queries'
+import { useDeleteCommentById, useGetCommentsByBoardId } from '@/lib/react-query/queries'
 import { toast } from '@/hooks/use-toast'
 import CommentForm from '@/components/CommentForm'
 
@@ -12,7 +12,7 @@ type props = {
   boardData: BoardDetailDto
 }
 
-export default function Comment({ boardId, boardData }: props) {
+export default function Comment({ boardId }: props) {
   const setTrigger = useTriggerStore((state) => state.setTrigger)
   const userinfo = useAuthStore((state) => state.userinfo)
   const trigger = useTriggerStore((state) => state.trigger)
@@ -23,21 +23,37 @@ export default function Comment({ boardId, boardData }: props) {
   const {
     data: commentData,
     refetch: fetchComments,
-  } = useGetCommentsByBoardId(boardId)
+  } = useGetCommentsByBoardId(boardId) as {
+    data: {
+      replies: {
+        children: any,
+        replyId: string,
+        nickname: string,
+        updateTime: string,
+        content: string,
+      }[],
+    },
+    refetch: () => void
+  }
 
 
   useEffect(() => {
     fetchComments()
   }, [fetchComments, trigger])
 
-  const { mutateAsync: deleteCommentAsync, isPending: isDeletingComment } =
-    useDeleteCommentById()
+  const { mutateAsync: deleteCommentAsync } = useDeleteCommentById()
 
   const handleDelete = async (replyId: string) => {
     const res = await deleteCommentAsync(replyId)
-    setTrigger()
-    toast({
-      title: '댓글이 삭제되었습니다',
+    if (res) {
+      setTrigger()
+      return toast({
+        title: '댓글이 삭제되었습니다',
+      })
+    }
+
+    return toast({
+      title: '댓글 삭제에 실패 했습니다.',
     })
   }
 

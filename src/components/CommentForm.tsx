@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { useAuthStore, useTriggerStore } from '@/lib/zustand/store'
-import { useCrerateComment, useUpdateComment } from '@/lib/react-query/queries'
+import { useCerateComment, useUpdateComment } from '@/lib/react-query/queries'
 import { toast } from '@/hooks/use-toast'
 
 type props = {
@@ -29,14 +29,12 @@ export default function CommentForm({
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
-  const [focused, setFoucsed] = useState(false)
+  const [focused, setFocused] = useState(false)
   const [content, setContent] = useState(editContent)
   const formRef = useRef<HTMLFormElement>(null)
 
-  const { mutateAsync: createCommentAsync, isPending: isCreatingComment } =
-    useCrerateComment()
-  const { mutateAsync: updateCommentAsync, isPending: isUpdatingComment } =
-    useUpdateComment()
+  const { mutateAsync: createCommentAsync } = useCerateComment()
+  const { mutateAsync: updateCommentAsync } = useUpdateComment()
 
   useEffect(() => {
     resizeTextArea()
@@ -51,7 +49,7 @@ export default function CommentForm({
     if (setEditId) setEditId('')
     if (setParentId) setParentId('')
     clearTextArea()
-    setFoucsed(false)
+    setFocused(false)
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -104,7 +102,7 @@ export default function CommentForm({
           ref={textAreaRef}
           value={content}
           onInput={handleInput}
-          onFocus={() => setFoucsed(true)}
+          onFocus={() => setFocused(true)}
         />
         {focused && (
           <div className='flex gap-2 self-end'>

@@ -16,7 +16,7 @@ type props = {
 }
 
 export default function Pagination({ totalPages, handlePageChange }: props) {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const [currentPage, setCurrentPage] = useState(1)
   const [prevPages, setPrevPages] = useState([] as number[])
   const [nextPages, setNextPages] = useState([] as number[])

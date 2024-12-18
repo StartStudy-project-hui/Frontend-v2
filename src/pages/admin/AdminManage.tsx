@@ -12,18 +12,16 @@ export default function AdminManage() {
   const [searchKeyword, setSearchKeyword] = useState('')
 
   const {
-    data: userResponse,
-    isPending: isFetchingUsersFromAdmin,
-    refetch: fetchUsersFromAdmin,
-  } = useGetUsersFromAdmin({
-    username: searchParams.get('username') || undefined,
-    page: searchParams.get('page') || undefined,
-  })
+    data: userResponse, refetch: fetchUsersFromAdmin } = useGetUsersFromAdmin({
+      username: searchParams.get('username') || undefined,
+      page: searchParams.get('page') || undefined,
+    }
+  )
 
   useEffect(() => {
     history.scrollRestoration = 'auto'
     fetchUsersFromAdmin()
-  }, [searchParams])
+  }, [fetchUsersFromAdmin, searchParams])
 
   const onSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value)
