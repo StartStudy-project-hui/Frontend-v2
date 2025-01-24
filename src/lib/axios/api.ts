@@ -101,7 +101,7 @@ export const renewToken = async () => {
 // ==============================
 export const signUpAccount = async (data: SignupRequestDto) => {
   const config = publicConfig({
-    url: '/sign',
+    url: '/auth/sign',
     method: 'POST',
     data,
   })
@@ -111,7 +111,7 @@ export const signUpAccount = async (data: SignupRequestDto) => {
 
 export const signInAccount = async (data: SigninInfo) => {
   const config = publicConfig({
-    url: '/login',
+    url: '/auth/login',
     method: 'POST',
     data,
   })
@@ -127,7 +127,7 @@ export const signInAccount = async (data: SigninInfo) => {
 
 export const signOutAccount = async () => {
   const config = userConfig({
-    url: '/service-logout',
+    url: '/auth/service-logout',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
