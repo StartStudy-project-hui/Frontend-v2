@@ -59,7 +59,7 @@ export const setRefreshToken = (token: string) => {
   localStorage.setItem('refreshToken', token)
 }
 
-export const setRefreshTokenatCookie = (token: string) => {
+export const setRefreshTokenCookie = (token: string) => {
   removeRefreshTokenAtCookie()
   setCookie('refreshToken', token, { path: '/' })
 }
@@ -74,7 +74,7 @@ export const getRefreshToken = () => {
   return refreshToken
 }
 
-export const getRefreshTokenatCookie = () => {
+export const getRefreshTokenCookie = () => {
   const refreshToken = getCookie('refreshToken')
   return refreshToken
 }
