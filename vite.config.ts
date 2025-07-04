@@ -12,7 +12,7 @@ export default defineConfig({
   server: {
     proxy: {
         '/api': {
-          target: 'https://api.startstudy.shop',
+          target: 'https://api.startstudy.store',
           // rewrite: (path) => path.replace(/^\/api/, ''),
           changeOrigin: true,
           secure: false,      
