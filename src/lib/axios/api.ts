@@ -101,7 +101,7 @@ export const renewToken = async () => {
 // ==============================
 export const signUpAccount = async (data: SignupRequestDto) => {
   const config = publicConfig({
-    url: '/auth/sign',
+    url: ' /api/v1/auth/sign',
     method: 'POST',
     data,
   })
@@ -111,7 +111,7 @@ export const signUpAccount = async (data: SignupRequestDto) => {
 
 export const signInAccount = async (data: SigninInfo) => {
   const config = publicConfig({
-    url: '/auth/login',
+    url: ' /api/v1/auth/login',
     method: 'POST',
     data,
   })
@@ -127,7 +127,7 @@ export const signInAccount = async (data: SigninInfo) => {
 
 export const signOutAccount = async () => {
   const config = userConfig({
-    url: '/auth/service-logout',
+    url: ' /api/v1/auth/service-logout',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ export const getPosts = async (
   const { category, order, page, title, connectionType } = requestBody
 
   const config = publicConfig({
-    url: '/',
+    url: '/api/v1/',
     method: 'GET',
     params: {
       category,
@@ -168,7 +168,7 @@ export const getPosts = async (
 // ==============================
 export const createPost = async (data: WritePostRequestDto) => {
   const config = userConfig({
-    url: '/board/member',
+    url: '/api/v1/board/member',
     method: 'POST',
     data,
   })
@@ -180,7 +180,7 @@ export const getPostById = async (
   boardId?: string
 ): Promise<BoardDetailDto> => {
   const config = userConfig({
-    url: `/board/${boardId}`,
+    url: `/api/v1/board/${boardId}`,
     method: 'GET',
   })
   const res = await axios(config)
@@ -189,7 +189,7 @@ export const getPostById = async (
 
 export const updatePost = async (data: ModifyPostInfo) => {
   const config = userConfig({
-    url: `/board/member`,
+    url: `/api/v1/board/member`,
     method: 'PATCH',
     data,
   })
@@ -199,7 +199,7 @@ export const updatePost = async (data: ModifyPostInfo) => {
 
 export const updateRecruit = async (data: ModifyRecruitInfo) => {
   const config = userConfig({
-    url: `/board/member/recruit/${data.boardId}`,
+    url: `/api/v1/board/member/recruit/${data.boardId}`,
     method: 'PATCH',
     data: data.recruit,
   })
@@ -211,7 +211,7 @@ export const deletePost = async (requestBody: DeletePostInfo) => {
   const { boardId } = requestBody
 
   const config = userConfig({
-    url: `/board/member/${boardId}`,
+    url: `/api/v1/board/member/${boardId}`,
     method: 'DELETE',
     params: requestBody,
   })
@@ -227,7 +227,7 @@ export const getUserPosts = async (
 ): Promise<BoardResponseDto> => {
   const { recruit, category, order, page, connectionType } = data
   const config = userConfig({
-    url: `/user/lists`,
+    url: `/api/v1/user/lists`,
     method: 'GET',
     params: {
       recruit,
@@ -243,7 +243,7 @@ export const getUserPosts = async (
 
 export const getUserInfo = async (): Promise<UserInfoDto> => {
   const config = userConfig({
-    url: `/user/info`,
+    url: `/api/v1/user/info`,
     method: 'GET',
   })
   const res = await axios(config)
@@ -252,7 +252,7 @@ export const getUserInfo = async (): Promise<UserInfoDto> => {
 
 export const updateUserInfo = async (data: ModifyUserInfo) => {
   const config = userConfig({
-    url: `/user/info`,
+    url: `/api/v1/user/info`,
     method: 'PATCH',
     data,
   })
@@ -265,7 +265,7 @@ export const getLikedPosts = async (
 ): Promise<BoardResponseDto> => {
   const { recruit, category, order, page, connectionType } = data
   const config = userConfig({
-    url: `/user/post-likes`,
+    url: `/api/v1/user/post-likes`,
     method: 'GET',
     params: {
       recruit,
@@ -284,7 +284,7 @@ export const getLikedPosts = async (
 // ==============================
 export const getCommentByBoardId = async (boardId: string) => {
   const config = userConfig({
-    url: `/reply/view/${boardId}`,
+    url: `/api/v1/reply/view/${boardId}`,
     method: 'GET',
   })
   const res = await axios(config)
@@ -292,7 +292,7 @@ export const getCommentByBoardId = async (boardId: string) => {
 }
 export const createComment = async (data: AddCommentRequestDto) => {
   const config = userConfig({
-    url: `/reply`,
+    url: `/api/v1/reply`,
     method: 'POST',
     data,
   })
@@ -302,7 +302,7 @@ export const createComment = async (data: AddCommentRequestDto) => {
 
 export const updateComment = async (data: EditCommentRequestDto) => {
   const config = userConfig({
-    url: `/reply`,
+    url: `/api/v1/reply`,
     method: 'PATCH',
     data,
   })
@@ -312,7 +312,7 @@ export const updateComment = async (data: EditCommentRequestDto) => {
 
 export const deleteCommentById = async (replyId: string) => {
   const config = userConfig({
-    url: `/reply/${replyId}`,
+    url: `/api/v1/reply/${replyId}`,
     method: 'DELETE',
     params: {
       rno: replyId,
@@ -327,7 +327,7 @@ export const deleteCommentById = async (replyId: string) => {
 // ==============================
 export const likePostById = async (boardId: string, signal: AbortSignal) => {
   const config = userConfig({
-    url: `/post-like/${boardId}`,
+    url: `/api/v1/post-like/${boardId}`,
     method: 'POST',
   })
   const res = await axios({ ...config, signal })
@@ -339,7 +339,7 @@ export const unlikePostById = async (
   signal: AbortSignal
 ) => {
   const config = userConfig({
-    url: `/post-like/${postLikeId}`,
+    url: `/api/v1/post-like/${postLikeId}`,
     method: 'DELETE',
   })
   const res = await axios({ ...config, signal })
@@ -357,7 +357,7 @@ export const getUsersInfoFromAdmin = async ({
   page?: string
 }): Promise<UserResponseDto> => {
   const config = userConfig({
-    url: `/admin/user-all`,
+    url: `/api/v1/admin/user-all`,
     method: 'GET',
     params: {
       username,
@@ -371,7 +371,7 @@ export const getUsersInfoFromAdmin = async ({
 export const getAdminDashboard = async (data: UserListRequestInfo) => {
   const { recruit, category, order } = data
   userConfig({
-    url: `/admin/dash-board`,
+    url: `/api/v1/admin/dash-board`,
     method: 'GET',
     params: {
       recruit,
@@ -383,7 +383,7 @@ export const getAdminDashboard = async (data: UserListRequestInfo) => {
 
 export const deletePostFromAdmin = async (boardId: string) => {
   const config = userConfig({
-    url: `/admin/board/${boardId}?role=ROLE_ADMIN`,
+    url: `/api/v1/admin/board/${boardId}?role=ROLE_ADMIN`,
     method: 'DELETE',
   })
   const res = await axios(config)
