@@ -8,28 +8,29 @@ export default function DashboardLayout() {
   const currentPath = pathname.split('/')[2]
 
   return (
-    <div className='flex p-4 md:p-10 h-fit bg-muted/40'>
-      <div className='flex flex-col min-w-[320px]'>
-        <div className='mx-auto max-w-6xl'>
-          <h1 className='text-3xl font-semibold'>마이페이지</h1>
-          <div className='flex mt-12'>
-            <nav className=''>
-              <ul className='flex flex-col gap-4 min-w-48 text-lg text-muted-foreground'>
-                {MyPageList.map((item) => (
-                  <li
-                    key={item.id}
-                    className={`${currentPath === item.value ? 'text-xl text-black font-semibold' : ''} hover:cursor-pointer`}
-                    onClick={() => navigate(item.value)}
-                  >
-                    {item.title}
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-        </div>
+    <div className='mx-auto flex max-w-5xl gap-12 px-6 py-10'>
+      <div className='w-44 shrink-0'>
+        <h1 className='text-xl font-bold text-gray-900'>마이페이지</h1>
+        <nav className='mt-8'>
+          <ul className='flex flex-col gap-1 text-sm'>
+            {MyPageList.map((item) => (
+              <li
+                key={item.id}
+                className={`cursor-pointer rounded-lg px-3 py-2 font-medium transition-colors
+                  ${
+                    currentPath === item.value
+                      ? 'bg-blue-50 text-blue-700'
+                      : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                  }`}
+                onClick={() => navigate(item.value)}
+              >
+                {item.title}
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
-      <div className='mr-auto w-full max-w-3xl'>
+      <div className='min-w-0 flex-1'>
         <Outlet />
       </div>
     </div>

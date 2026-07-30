@@ -44,33 +44,43 @@ export default function Header() {
     handleLoginCheck()
   }, []); 
   return (
-    <header className='flex justify-between items-center px-5 py-3'>
-      <div></div>
-      <Link to={'/'}>
-        <img src='/logo.png' className='w-[150px] h-[50px]' />
-      </Link>
-      <div className='flex gap-5 px-5'>
-        {!isAuthenticated && (
-          <>
-            <Modal target='회원가입'></Modal>
-            <Modal target='로그인'></Modal>
-          </>
-        )}
-        {isAuthenticated && (
-          <>
-            {userInfo?.role === 'ROLE_ADMIN' && (
-              <>
-                <button onClick={() => navigate('/admin/dashboard')}>
+    <header className='sticky top-0 z-10 border-b border-gray-100 bg-white/80 backdrop-blur-sm'>
+      <div className='mx-auto flex max-w-5xl items-center justify-between px-6 py-3'>
+        <Link to={'/'} className='flex items-center'>
+          <img src='/logo.png' className='h-9 w-auto' />
+        </Link>
+        <div className='flex items-center gap-1 text-sm font-medium text-gray-500'>
+          {!isAuthenticated && (
+            <>
+              <Modal target='회원가입'></Modal>
+              <Modal target='로그인'></Modal>
+            </>
+          )}
+          {isAuthenticated && (
+            <>
+              {userInfo?.role === 'ROLE_ADMIN' && (
+                <button
+                  className='rounded-md px-3 py-2 transition-colors hover:bg-gray-50 hover:text-gray-900'
+                  onClick={() => navigate('/admin/dashboard')}
+                >
                   관리자페이지
                 </button>
-              </>
-            )}
-            <button onClick={() => navigate('/mypage/profile')}>
-              마이페이지
-            </button>
-            <button onClick={handleSignOut}>로그아웃</button>
-          </>
-        )}
+              )}
+              <button
+                className='rounded-md px-3 py-2 transition-colors hover:bg-gray-50 hover:text-gray-900'
+                onClick={() => navigate('/mypage/profile')}
+              >
+                마이페이지
+              </button>
+              <button
+                className='rounded-md px-3 py-2 transition-colors hover:bg-gray-50 hover:text-gray-900'
+                onClick={handleSignOut}
+              >
+                로그아웃
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </header>
   )

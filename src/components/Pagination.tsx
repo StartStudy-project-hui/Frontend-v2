@@ -49,16 +49,15 @@ export default function Pagination({ totalPages, handlePageChange }: props) {
   }
 
   return (
-    <div className='flex justify-center mt-5'>
+    <div className='flex justify-center'>
       <Paging>
-        <PaginationContent>
-          {}
+        <PaginationContent className='gap-1'>
           <PaginationItem>
             <PaginationPrevious
               onClick={() => handleClick(currentPage - 1)}
               aria-disabled={prevPages.length === 0}
               tabIndex={prevPages.length === 0 ? -1 : 0}
-              className={`${prevPages.length === 0 ? 'pointer-events-none opacity-50' : ''} cursor-pointer`}
+              className={`${prevPages.length === 0 ? 'pointer-events-none opacity-40' : ''} cursor-pointer rounded-lg`}
             />
           </PaginationItem>
 
@@ -67,7 +66,7 @@ export default function Pagination({ totalPages, handlePageChange }: props) {
               <PaginationLink
                 key={num}
                 onClick={() => handleClick(num)}
-                className='cursor-pointer'
+                className='cursor-pointer rounded-lg text-gray-500'
               >
                 {num}
               </PaginationLink>
@@ -75,7 +74,7 @@ export default function Pagination({ totalPages, handlePageChange }: props) {
           </PaginationItem>
 
           <PaginationItem>
-            <PaginationLink className='font-bold border rounded-xl hover:bg-transparent hover:cursor-pointer'>
+            <PaginationLink className='cursor-pointer rounded-lg bg-blue-600 font-semibold text-white hover:bg-blue-600 hover:text-white'>
               {currentPage}
             </PaginationLink>
           </PaginationItem>
@@ -85,7 +84,7 @@ export default function Pagination({ totalPages, handlePageChange }: props) {
               <PaginationLink
                 key={num}
                 onClick={() => handleClick(num)}
-                className='cursor-pointer'
+                className='cursor-pointer rounded-lg text-gray-500'
               >
                 {num}
               </PaginationLink>
@@ -96,7 +95,7 @@ export default function Pagination({ totalPages, handlePageChange }: props) {
               onClick={() => handleClick(currentPage + 1)}
               aria-disabled={nextPages.length === 0}
               tabIndex={nextPages.length === 0 ? -1 : 0}
-              className={`${nextPages.length === 0 ? 'pointer-events-none opacity-50' : ''} cursor-pointer`}
+              className={`${nextPages.length === 0 ? 'pointer-events-none opacity-40' : ''} cursor-pointer rounded-lg`}
             />
           </PaginationItem>
           {/* <PaginationItem>

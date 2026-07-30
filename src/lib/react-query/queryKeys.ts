@@ -2,6 +2,7 @@ export enum QUERY_KEYS {
   GET_POSTS = 'getPosts',
   CREATE_POST = 'createPost',
   GET_POST_BY_ID = 'getPostById',
+  GET_POST_LIKE_STATUS = 'getPostLikeStatus',
 
   GET_USER_POSTS = 'getUserPosts',
   GET_USER_INFO = 'getUserInfo',

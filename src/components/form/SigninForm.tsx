@@ -19,6 +19,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
+const BASE_URL = import.meta.env.VITE_BASE_URL
+
 type props = {
   handleTarget: (_target: '회원가입' | '로그인' | null) => void
   closeModal: () => void
@@ -93,10 +95,10 @@ export default function SigninForm({ handleTarget, closeModal }: props) {
             로그인
           </Button>
 
-          <a href='https://api.startstudy.store/oauth2/authorization/kakao' className='shad-button_primary'>
+          <a href={`${BASE_URL}/oauth2/authorization/kakao`} className='shad-button_primary'>
             카카오 로그인
           </a>
-          <a href='https://api.startstudy.store/oauth2/authorization/naver' className='shad-button_primary'>
+          <a href={`${BASE_URL}/oauth2/authorization/naver`} className='shad-button_primary'>
             네이버 로그인
           </a>
           <p className='text-small-regular text-light-2 text-center mt-2'>

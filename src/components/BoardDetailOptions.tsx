@@ -6,6 +6,7 @@ import { BoardDetailDto } from '@/types/Dto'
 import {
   useDeletePost,
   useDeletePostFromAdmin,
+  useGetPostLikeStatus,
   useLikePostById,
   useUnlikePostById,
 } from '@/lib/react-query/queries'
@@ -20,16 +21,17 @@ type props = {
 export default function BoardDetailOptions({ boardId, boardData }: props) {
   const navigate = useNavigate()
   const abortControllerRef = useRef<AbortController | null>(null)
+  const isTogglingRef = useRef(false)
   const userInfo = useAuthStore((state) => state.userinfo)
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const setTrigger = useTriggerStore((state) => state.setTrigger)
 
-  const [isFavorite, setIsFavorite] = useState(
-    boardData.postLike === '관심 완료'
-  )
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [postLikeId, setPostLikeId] = useState<string | null>(null)
 
   const { mutateAsync: deletePostAsync } =
     useDeletePost()
+  const { refetch: fetchPostLikeStatus } = useGetPostLikeStatus(boardId)
   const { mutateAsync: likePostAsync } =
     useLikePostById()
   const { mutateAsync: unlikePostAsync } =
@@ -37,30 +39,36 @@ export default function BoardDetailOptions({ boardId, boardData }: props) {
   const { mutateAsync: deletePostFromAdminAsync } = useDeletePostFromAdmin()
 
   useEffect(() => {
-    setIsFavorite(boardData.postLike === '관심 완료')
-  }, [boardData])
+    fetchPostLikeStatus().then(({ data }) => {
+      if (data) {
+        setIsFavorite(data.postLike === '관심 완료')
+        setPostLikeId(data.postLikeId ?? null)
+      }
+    })
+  }, [boardId, boardData])
 
   const toggleBoardFavorites = async () => {
-    if (boardId) {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort()
-        setIsFavorite(!isFavorite)
-      }
+    if (!boardId || isTogglingRef.current) return
 
-      abortControllerRef.current = new AbortController()
-      const { signal } = abortControllerRef.current
+    isTogglingRef.current = true
+    abortControllerRef.current = new AbortController()
+    const { signal } = abortControllerRef.current
 
-      try {
-        if (!isFavorite) {
-          await likePostAsync({ boardId, signal })
-        } else {
-          await unlikePostAsync({ postLikeId: boardData.postLikeId, signal })
-        }
-        setIsFavorite(!isFavorite)
-        setTrigger()
-      } finally {
-        abortControllerRef.current = null
+    try {
+      if (!isFavorite) {
+        await likePostAsync({ boardId, signal })
+      } else if (postLikeId) {
+        await unlikePostAsync({ postLikeId, signal })
       }
+      const { data } = await fetchPostLikeStatus()
+      if (data) {
+        setIsFavorite(data.postLike === '관심 완료')
+        setPostLikeId(data.postLikeId ?? null)
+      }
+      setTrigger()
+    } finally {
+      abortControllerRef.current = null
+      isTogglingRef.current = false
     }
   }
 
@@ -84,33 +92,46 @@ export default function BoardDetailOptions({ boardId, boardData }: props) {
   if (!isAuthenticated) return
 
   return (
-    <div className='flex gap-5'>
+    <div className='flex items-center gap-1'>
       {userInfo?.role === 'ROLE_ADMIN' && (
-        <button onClick={handleAdminDeleteBoard}>
-          <span className='text-red-500'>삭제(관리자)</span>
+        <button
+          className='rounded-md px-2 py-1.5 text-xs font-medium text-red-500 transition-colors hover:bg-red-50'
+          onClick={handleAdminDeleteBoard}
+        >
+          삭제(관리자)
         </button>
       )}
-      <button onClick={toggleBoardFavorites}>
-        <>
-          {isFavorite && <Star color='gray' fill='yellow' />}
-          {!isFavorite && <Star color='black' />}
-        </>
+      <button
+        className='rounded-md p-1.5 transition-colors hover:bg-gray-50'
+        onClick={toggleBoardFavorites}
+      >
+        {isFavorite ? (
+          <Star className='h-5 w-5' color='#FACC15' fill='#FACC15' />
+        ) : (
+          <Star className='h-5 w-5' color='#D1D5DB' />
+        )}
       </button>
       {userInfo?.nickname === boardData.boardWriteNickname && (
         <>
           <Link
+            className='rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600'
             to={'./edit'}
             state={{
               category: boardData.category,
               title: boardData.title,
               content: boardData.content,
+              connectionType: boardData.connectionType,
+              offlineLocation: boardData.offlineLocation,
               boardId,
             }}
           >
-            <Pencil />
+            <Pencil className='h-4 w-4' />
           </Link>
-          <button onClick={handleDeleteBoard}>
-            <Trash2 color='red' />
+          <button
+            className='rounded-md p-1.5 text-red-400 transition-colors hover:bg-red-50 hover:text-red-500'
+            onClick={handleDeleteBoard}
+          >
+            <Trash2 className='h-4 w-4' />
           </button>
         </>
       )}

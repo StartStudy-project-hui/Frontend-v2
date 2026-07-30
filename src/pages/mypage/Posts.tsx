@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useGetUserPosts } from '@/lib/react-query/queries'
 import {
@@ -9,8 +9,10 @@ import {
   RecruitList,
 } from '@/constants'
 import { BoardListItem, Pagination } from '@/components'
+import { Button } from '@/components/ui/button'
 
 export default function Posts() {
+  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [recruitId, setRecruitId] = useState(0)
@@ -22,8 +24,8 @@ export default function Posts() {
     data: boardResponse,
     refetch: fetchUserPosts,
   } = useGetUserPosts({
-    recruit: searchParams.get('recruit') || '모집중',
-    category: searchParams.get('category') || '전체',
+    recruit: searchParams.get('recruit') || 'RECRUITING',
+    category: searchParams.get('category') || 'ALL',
     order: searchParams.get('order') || '0',
     connectionType: searchParams.get('connectionType') || undefined,
     page: searchParams.get('page') || undefined,
@@ -70,13 +72,23 @@ export default function Posts() {
   }
 
   return (
-    <div className='flex flex-col gap-6 w-full'>
-      <ul className='flex gap-10'>
+    <div className='flex w-full flex-col gap-6'>
+      <div className='flex items-center justify-between'>
+        <h2 className='text-lg font-bold text-gray-900'>작성글</h2>
+        <Button
+          className='rounded-lg font-semibold'
+          onClick={() => navigate('/write')}
+        >
+          글쓰기
+        </Button>
+      </div>
+
+      <ul className='flex gap-6 border-b border-gray-100'>
         {CategoryList.map((item) => (
           <li
             key={item.id}
-            className={`text-center min-w-12 text-lg font-bold hover:cursor-pointer
-                    ${categoryId === item.id ? 'text-black0' : 'text-gray-500'}
+            className={`cursor-pointer border-b-2 pb-3 text-sm font-semibold transition-colors
+                    ${categoryId === item.id ? 'border-blue-600 text-gray-900' : 'border-transparent text-gray-400 hover:text-gray-600'}
                     `}
             onClick={() => selectCategory(item.id)}
           >
@@ -84,15 +96,14 @@ export default function Posts() {
           </li>
         ))}
       </ul>
-      <hr />
-      <div className='flex justify-between'>
-        <ul className='flex gap-5 text-xl'>
+
+      <div className='flex items-center justify-between'>
+        <ul className='flex gap-4 text-sm font-medium'>
           {RecruitList.map((item) => (
             <li
               key={item.id}
-              className={`
-                      hover:cursor-pointer
-                      ${recruitId === item.id ? 'text-black' : 'text-gray-300'} 
+              className={`cursor-pointer transition-colors
+                      ${recruitId === item.id ? 'text-blue-600' : 'text-gray-400 hover:text-gray-600'}
                     `}
               onClick={() => selectRecruit(item.id)}
             >
@@ -101,7 +112,7 @@ export default function Posts() {
           ))}
         </ul>
         <select
-          className='p-2 border'
+          className='rounded-lg border border-gray-200 px-3 py-1.5 text-sm outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100'
           onChange={(e) => selectOrder(Number(e.target.value))}
         >
           {OrderList.map((item) => (
@@ -111,9 +122,13 @@ export default function Posts() {
           ))}
         </select>
       </div>
-      <div className='flex gap-3'>
+
+      <div className='flex gap-4'>
         {ConnectionTypes.map((item) => (
-          <label key={item.id} className='flex items-center gap-1'>
+          <label
+            key={item.id}
+            className='flex cursor-pointer items-center gap-1.5 text-sm text-gray-500'
+          >
             <input
               type='radio'
               value={item.value}
@@ -122,11 +137,11 @@ export default function Posts() {
               className='hidden'
             />
             <span
-              className={`flex items-center justify-center w-4 h-4 border-2 rounded-full cursor-pointer 
-                     ${connectionTypeId === item.id ? 'bg-black border-black' : 'bg-white border-gray-300'}`}
+              className={`flex h-4 w-4 items-center justify-center rounded-full border-2
+                     ${connectionTypeId === item.id ? 'border-blue-600 bg-blue-600' : 'border-gray-200 bg-white'}`}
             >
               {connectionTypeId === item.id && (
-                <span className='w-2 h-2 rounded-full bg-white' />
+                <span className='h-1.5 w-1.5 rounded-full bg-white' />
               )}
             </span>
             <span>{item.title}</span>
@@ -134,18 +149,15 @@ export default function Posts() {
         ))}
       </div>
 
-      <hr className='' />
       {boardResponse && (
         <>
-          <div>
-            <ul className=''>
-              {boardResponse.content.map((board) => (
-                <li key={board.boardId} className='my-8'>
-                  <BoardListItem board={board} />
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className='flex flex-col gap-3'>
+            {boardResponse.content.map((board) => (
+              <li key={board.boardId}>
+                <BoardListItem board={board} />
+              </li>
+            ))}
+          </ul>
           <Pagination
             totalPages={boardResponse.totalPages}
             handlePageChange={handlePageChange}

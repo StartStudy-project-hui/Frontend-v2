@@ -88,12 +88,12 @@ export default function CommentForm({
   return (
     <>
       <form
-        className={`${appear === 'form' ? 'min-h-[100px]' : ''} flex flex-col gap-3 mt-5 min-h-[50px]`}
+        className={`${appear === 'form' ? 'min-h-[100px]' : ''} mt-3 flex min-h-[50px] flex-col gap-2`}
         ref={formRef}
         onSubmit={handleSubmit}
       >
         <textarea
-          className='px-2 w-full border-b border-b-gray-300 outline-none focus:border-b-black overflow-y-hidden resize-none'
+          className='w-full resize-none overflow-y-hidden rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none transition-shadow focus:border-blue-300 focus:ring-2 focus:ring-blue-100'
           placeholder={`${
             isAuthenticated ? '댓글 추가...' : '로그인 후 이용가능합니다'
           }`}
@@ -107,17 +107,16 @@ export default function CommentForm({
         {focused && (
           <div className='flex gap-2 self-end'>
             <button
-              // disabled={isCreating || isUpdating}
+              className='rounded-md px-3 py-1.5 text-sm font-medium text-gray-500 transition-colors hover:bg-gray-50'
               onClick={handleCancel}
             >
               취소
             </button>
             <button
-              // disabled={isCreating || isUpdating}
+              className='rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-blue-700'
               type='submit'
             >
               저장
-              {/* {isCreating || isUpdating ? <Loader /> : '저장'} */}
             </button>
           </div>
         )}

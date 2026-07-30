@@ -50,6 +50,7 @@ axios.interceptors.response.use(
         return Promise.reject(error)
       }
     }
+    return Promise.reject(error)
   }
 )
 
@@ -88,7 +89,7 @@ const userConfig = (_config: AxiosRequestConfig) => {
 // ==============================
 export const renewToken = async () => {
   const config = userConfig({
-    url: '/renew-token',
+    url: '/api/renew-token',
     method: 'POST',
   })
   const axiosInstance = axios.create()
@@ -101,7 +102,7 @@ export const renewToken = async () => {
 // ==============================
 export const signUpAccount = async (data: SignupRequestDto) => {
   const config = publicConfig({
-    url: ' /api/v1/auth/sign',
+    url: '/api/v1/auth/sign',
     method: 'POST',
     data,
   })
@@ -111,7 +112,7 @@ export const signUpAccount = async (data: SignupRequestDto) => {
 
 export const signInAccount = async (data: SigninInfo) => {
   const config = publicConfig({
-    url: ' /api/v1/auth/login',
+    url: '/api/v1/auth/login',
     method: 'POST',
     data,
   })
@@ -127,7 +128,7 @@ export const signInAccount = async (data: SigninInfo) => {
 
 export const signOutAccount = async () => {
   const config = userConfig({
-    url: ' /api/v1/auth/service-logout',
+    url: '/api/v1/auth/service-logout',
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -187,6 +188,15 @@ export const getPostById = async (
   return res.data
 }
 
+export const increaseViewCount = async (boardId: string) => {
+  const config = userConfig({
+    url: `/api/v1/board/${boardId}`,
+    method: 'POST',
+  })
+  const res = await axios(config)
+  return res.data
+}
+
 export const updatePost = async (data: ModifyPostInfo) => {
   const config = userConfig({
     url: `/api/v1/board/member`,
@@ -230,7 +240,7 @@ export const getUserPosts = async (
     url: `/api/v1/user/lists`,
     method: 'GET',
     params: {
-      recruit,
+      recruitStatus: recruit,
       category,
       order,
       connectionType,
@@ -268,7 +278,7 @@ export const getLikedPosts = async (
     url: `/api/v1/user/post-likes`,
     method: 'GET',
     params: {
-      recruit,
+      recruitStatus: recruit,
       category,
       order,
       connectionType,
@@ -325,6 +335,17 @@ export const deleteCommentById = async (replyId: string) => {
 // ==============================
 /* 관심글 등록 */
 // ==============================
+export const getPostLikeStatus = async (
+  boardId: string
+): Promise<{ postLike: string; postLikeId: string | null | undefined }> => {
+  const config = userConfig({
+    url: `/api/v1/view/post-like/${boardId}`,
+    method: 'GET',
+  })
+  const res = await axios(config)
+  return res.data
+}
+
 export const likePostById = async (boardId: string, signal: AbortSignal) => {
   const config = userConfig({
     url: `/api/v1/post-like/${boardId}`,
@@ -374,7 +395,7 @@ export const getAdminDashboard = async (data: UserListRequestInfo) => {
     url: `/api/v1/admin/dash-board`,
     method: 'GET',
     params: {
-      recruit,
+      recruitStatus: recruit,
       category,
       order,
     },

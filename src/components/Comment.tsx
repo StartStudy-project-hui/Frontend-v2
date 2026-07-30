@@ -88,24 +88,33 @@ export default function Comment({ boardId }: props) {
   return (
     <div>
       <CommentForm appear='form' boardId={boardId!} action='create' />
-      <ul className='flex flex-col gap-8 mt-5'>
+      <ul className='mt-6 flex flex-col divide-y divide-gray-100'>
         {commentData?.replies && commentData.replies.map((comment) => {
           const replies = pureReplies(comment.children)
 
           return (
-            <li className='h-fit' key={comment.replyId}>
+            <li className='h-fit py-5 first:pt-0' key={comment.replyId}>
               <div>
-                <div className='flex gap-5'>
-                  <div className='font-bold'>{comment.nickname}</div>
-                  <div className='text-gray-500'>
+                <div className='flex items-center gap-2 text-sm'>
+                  <span className='font-semibold text-gray-800'>
+                    {comment.nickname}
+                  </span>
+                  <span className='text-gray-300'>·</span>
+                  <span className='text-gray-400'>
                     {formatDate(comment.updateTime)}
-                  </div>
+                  </span>
                   {userinfo?.nickname === comment.nickname && (
-                    <div className='flex gap-2'>
-                      <button onClick={() => setEditId(comment.replyId!)}>
+                    <div className='ml-1 flex gap-1 text-xs text-gray-400'>
+                      <button
+                        className='rounded px-1.5 py-0.5 transition-colors hover:bg-gray-50 hover:text-gray-700'
+                        onClick={() => setEditId(comment.replyId!)}
+                      >
                         수정
                       </button>
-                      <button onClick={() => handleDelete(comment.replyId!)}>
+                      <button
+                        className='rounded px-1.5 py-0.5 transition-colors hover:bg-red-50 hover:text-red-500'
+                        onClick={() => handleDelete(comment.replyId!)}
+                      >
                         삭제
                       </button>
                     </div>
@@ -122,7 +131,9 @@ export default function Comment({ boardId }: props) {
                   />
                 )}
                 {!(editId === comment.replyId) && (
-                  <p className='mt-1 text-lg'>{comment.content}</p>
+                  <p className='mt-1.5 text-[15px] text-gray-700'>
+                    {comment.content}
+                  </p>
                 )}
                 {parentId === comment.replyId && (
                   <CommentForm
@@ -135,28 +146,35 @@ export default function Comment({ boardId }: props) {
                 )}
                 {!(parentId === comment.replyId) && (
                   <button
-                    className='mt-1 ml-2 text-gray-500'
+                    className='mt-1.5 text-xs font-medium text-gray-400 transition-colors hover:text-gray-600'
                     onClick={() => setParentId(comment.replyId!)}
                   >
-                    답글
+                    답글달기
                   </button>
                 )}
               </div>
-              <ul className='mt-1 ml-5'>
+              <ul className='mt-4 ml-5 flex flex-col gap-4 border-l border-gray-100 pl-4'>
                 {replies.map((reply) => (
                   <li key={reply.replyId}>
                     <div>
-                      <div className='flex gap-5'>
-                        <div className='font-bold'>{reply.nickname}</div>
-                        <div className='text-gray-500'>
+                      <div className='flex items-center gap-2 text-sm'>
+                        <span className='font-semibold text-gray-800'>
+                          {reply.nickname}
+                        </span>
+                        <span className='text-gray-300'>·</span>
+                        <span className='text-gray-400'>
                           {formatDate(reply.updateTime)}
-                        </div>
+                        </span>
                         {userinfo?.nickname === reply.nickname && (
-                          <div className='flex gap-2'>
-                            <button onClick={() => setEditId(reply.replyId!)}>
+                          <div className='ml-1 flex gap-1 text-xs text-gray-400'>
+                            <button
+                              className='rounded px-1.5 py-0.5 transition-colors hover:bg-gray-50 hover:text-gray-700'
+                              onClick={() => setEditId(reply.replyId!)}
+                            >
                               수정
                             </button>
                             <button
+                              className='rounded px-1.5 py-0.5 transition-colors hover:bg-red-50 hover:text-red-500'
                               onClick={() => handleDelete(reply.replyId!)}
                             >
                               삭제
@@ -175,7 +193,9 @@ export default function Comment({ boardId }: props) {
                         />
                       )}
                       {!(editId === reply.replyId) && (
-                        <p className='mt-1 text-lg'>{reply.content}</p>
+                        <p className='mt-1.5 text-[15px] text-gray-700'>
+                          {reply.content}
+                        </p>
                       )}
                       {parentId === reply.replyId && (
                         <CommentForm
@@ -188,10 +208,10 @@ export default function Comment({ boardId }: props) {
                       )}
                       {!(parentId === reply.replyId) && (
                         <button
-                          className='mt-1 ml-2 text-gray-500'
+                          className='mt-1.5 text-xs font-medium text-gray-400 transition-colors hover:text-gray-600'
                           onClick={() => setParentId(reply.replyId!)}
                         >
-                          답글
+                          답글달기
                         </button>
                       )}
                     </div>

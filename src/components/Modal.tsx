@@ -33,7 +33,9 @@ export default function Modal({ target }: props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>{target}</DialogTrigger>
+      <DialogTrigger className='rounded-md px-3 py-2 transition-colors hover:bg-gray-50 hover:text-gray-900'>
+        {target}
+      </DialogTrigger>
       <DialogContent>
         {currentTarget === '회원가입' && (
           <>

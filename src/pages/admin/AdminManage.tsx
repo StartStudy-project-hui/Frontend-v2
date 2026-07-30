@@ -42,30 +42,32 @@ export default function AdminManage() {
     <div className='w-full'>
       <section>
         <form className='flex items-center gap-3' onSubmit={handleSearch}>
-          <div className='relative flex items-center w-full'>
-            <Search className='absolute left-2' />
+          <div className='relative flex w-full items-center'>
+            <Search className='absolute left-3.5 h-4 w-4 text-gray-400' />
             <input
-              className='pl-10 py-2 w-full border'
+              className='w-full rounded-lg border border-gray-200 py-2.5 pl-10 pr-4 text-sm outline-none transition-shadow focus:border-blue-300 focus:ring-2 focus:ring-blue-100'
               placeholder='유저 검색'
               onChange={onSearchInputChange}
             />
           </div>
           <Button
-            className='h-full px-10 py-2 font-bold whitespace-nowrap'
+            className='h-full whitespace-nowrap rounded-lg px-6 font-semibold'
             type='submit'
           >
             검색
           </Button>
         </form>
       </section>
-      <section className='mt-5'>
-        <div className='flex gap-3 text-lg'>
-          전체 사용자{' '}
-          <span className='font-bold'>{userResponse?.content.length}</span>
+      <section className='mt-6'>
+        <div className='flex items-center gap-2 text-sm font-medium text-gray-500'>
+          전체 사용자
+          <span className='font-bold text-gray-900'>
+            {userResponse?.content.length}
+          </span>
         </div>
-        <div className='relative mt-5 overflow-x-auto'>
-          <table className='w-full text-sm text-left rtl:text-right text-gray-500'>
-            <thead className='text-xs text-gray-700 bg-gray-50'>
+        <div className='relative mt-4 overflow-hidden overflow-x-auto rounded-xl border border-gray-100'>
+          <table className='w-full text-left text-sm text-gray-500 rtl:text-right'>
+            <thead className='bg-gray-50 text-xs font-semibold text-gray-500'>
               <tr>
                 <th scope='col' className='px-6 py-3'>
                   Seq
@@ -83,16 +85,16 @@ export default function AdminManage() {
                   권한
                 </th>
                 <th scope='col' className='px-6 py-3'>
-                  가빙 방법
+                  가입 방법
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className='divide-y divide-gray-100'>
               {userResponse?.content.map((item) => (
-                <tr className='bg-white border-b' key={item.email}>
+                <tr className='bg-white transition-colors hover:bg-gray-50' key={item.email}>
                   <th
                     scope='row'
-                    className='px-6 py-4 font-medium text-gray-900 whitespace-nowrap'
+                    className='whitespace-nowrap px-6 py-4 font-medium text-gray-900'
                   >
                     {item.seq}
                   </th>
@@ -105,13 +107,15 @@ export default function AdminManage() {
               ))}
             </tbody>
           </table>
-          {userResponse && (
+        </div>
+        {userResponse && (
+          <div className='mt-6'>
             <Pagination
               totalPages={userResponse.totalPages}
               handlePageChange={handlePageChange}
             />
-          )}
-        </div>
+          </div>
+        )}
       </section>
     </div>
   )

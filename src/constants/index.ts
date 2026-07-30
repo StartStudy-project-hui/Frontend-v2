@@ -2,17 +2,17 @@ export const CategoryList = [
   {
     id: 0,
     title: '전체',
-    value: '전체',
+    value: 'ALL',
   },
   {
     id: 1,
     title: '코테',
-    value: '코테',
+    value: 'CODING_TEST',
   },
   {
     id: 2,
     title: '프로젝트',
-    value: '프로젝트',
+    value: 'PROJECT',
   },
   {
     id: 3,
@@ -22,7 +22,7 @@ export const CategoryList = [
   {
     id: 4,
     title: 'ETC',
-    value: '기타',
+    value: 'ETC',
   },
 ]
 
@@ -92,11 +92,11 @@ export const RecruitList = [
   {
     id: 0,
     title: '모집중',
-    value: '모집중',
+    value: 'RECRUITING',
   },
   {
     id: 1,
     title: '모집완료',
-    value: '모집완료',
+    value: 'COMPLETED',
   },
 ]

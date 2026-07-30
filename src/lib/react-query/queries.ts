@@ -23,7 +23,9 @@ import {
   getCommentByBoardId,
   getLikedPosts,
   getPostById,
+  getPostLikeStatus,
   getPosts,
+  increaseViewCount,
   getUserInfo,
   getUserPosts,
   getUsersInfoFromAdmin,
@@ -76,6 +78,12 @@ export const useGetPostById = (boardId?: string) => {
     queryKey: [QUERY_KEYS.GET_POST_BY_ID],
     queryFn: () => getPostById(boardId),
     enabled: false,
+  })
+}
+
+export const useIncreaseViewCount = () => {
+  return useMutation({
+    mutationFn: (boardId: string) => increaseViewCount(boardId),
   })
 }
 
@@ -150,6 +158,14 @@ export const useUpdateComment = () => {
 export const useDeleteCommentById = () => {
   return useMutation({
     mutationFn: (replyId: string) => deleteCommentById(replyId),
+  })
+}
+
+export const useGetPostLikeStatus = (boardId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_POST_LIKE_STATUS, boardId],
+    queryFn: () => getPostLikeStatus(boardId),
+    enabled: false,
   })
 }
 

@@ -13,12 +13,12 @@ const PostCategoryList = [
   {
     id: 0,
     title: '프로젝트',
-    value: '프로젝트',
+    value: 'PROJECT',
   },
   {
     id: 1,
     title: '코테',
-    value: '코테',
+    value: 'CODING_TEST',
   },
   {
     id: 2,
@@ -28,19 +28,33 @@ const PostCategoryList = [
   {
     id: 3,
     title: 'ETC',
-    value: '기타',
+    value: 'ETC',
   },
 ]
+
+const categoryDescriptionToEnum: Record<string, string> = {
+  전체: 'ALL',
+  코테: 'CODING_TEST',
+  프로젝트: 'PROJECT',
+  CS: 'CS',
+  기타: 'ETC',
+}
 
 export default function BoardEdit() {
   const navigate = useNavigate()
   const location = useLocation().state as ModifyPostInfo
 
-  const [category, setCategory] = useState(location.category)
+  const [category, setCategory] = useState(
+    categoryDescriptionToEnum[location.category] ?? location.category
+  )
   const [title, setTitle] = useState(location.title)
   const [content, setContent] = useState(location.content)
-  const [place, setPlace] = useState('온라인')
-  const [coords, setCoords] = useState<number[]>([])
+  const [place, setPlace] = useState(location.connectionType || '온라인')
+  const [coords, setCoords] = useState<number[]>(
+    location.offlineLocation
+      ? [location.offlineLocation.x, location.offlineLocation.y]
+      : []
+  )
 
   const { mutateAsync: updatePostAsync } = useUpdatePost()
 
@@ -89,11 +103,18 @@ export default function BoardEdit() {
   }
 
   return (
-    <form className='mt-8 mx-auto px-5 max-w-screen-lg' onSubmit={handleSubmit}>
-      <div className='flex items-center gap-3'>
-        <span className='font-bold'>카테고리</span>
+    <form
+      className='mx-auto max-w-3xl px-6 py-10'
+      onSubmit={handleSubmit}
+    >
+      <h1 className='text-2xl font-bold text-gray-900'>글 수정</h1>
+
+      <div className='mt-6 flex items-center gap-3'>
+        <span className='w-16 text-sm font-semibold text-gray-600'>
+          카테고리
+        </span>
         <select
-          className='p-3 border'
+          className='rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100'
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >
@@ -104,45 +125,51 @@ export default function BoardEdit() {
           ))}
         </select>
       </div>
+
       <Input
-        className='mt-5 text-2xl'
+        className='mt-4 h-14 rounded-lg border-gray-200 px-4 text-xl font-semibold focus-visible:ring-gray-200'
         required
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <div className='mt-5 h-96'>
+
+      <div className='mt-4 h-96 rounded-lg border border-gray-200'>
         <HtmlEditor initialValue={content} onChange={setContent} />
       </div>
-      <div className='mt-5'>
+
+      <div className='mt-6'>
         <div className='flex items-center gap-3'>
-          <span className='font-bold'>장소</span>
-          <select className='p-3 border' onChange={handleChangePlace}>
+          <span className='w-16 text-sm font-semibold text-gray-600'>
+            장소
+          </span>
+          <select
+            className='rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100'
+            value={place}
+            onChange={handleChangePlace}
+          >
             <option value={'온라인'}>온라인</option>
             <option value={'오프라인'}>오프라인</option>
           </select>
         </div>
-        <div className='mt-5'>
-          {place === '오프라인' && (
-            <KakaoMap
-              // targetCoords={[37.565942629174934, 126.98883954144402]}
-              setCoords={setCoords}
-            />
-          )}
-        </div>
+        {place === '오프라인' && (
+          <div className='mt-4'>
+            <KakaoMap setCoords={setCoords} />
+          </div>
+        )}
       </div>
-      <div className='flex justify-between mt-5'>
-        <div></div>
-        <div className='flex gap-3'>
-          <Button
-            className='text-black font-bold bg-white hover:bg-transparent'
-            onClick={handleCancel}
-          >
-            취소
-          </Button>
-          <Button className='' type='submit'>
-            등록
-          </Button>
-        </div>
+
+      <div className='mt-8 flex justify-end gap-3 border-t border-gray-100 pt-6'>
+        <Button
+          type='button'
+          variant='outline'
+          className='rounded-lg font-semibold'
+          onClick={handleCancel}
+        >
+          취소
+        </Button>
+        <Button className='rounded-lg px-6 font-semibold' type='submit'>
+          등록
+        </Button>
       </div>
     </form>
   )
