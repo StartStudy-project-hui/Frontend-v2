@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Search } from 'lucide-react'
+import { RotateCcw, Search } from 'lucide-react'
 import {
   ScrollRestoration,
   useNavigate,
@@ -51,6 +51,14 @@ export default function Home() {
       searchParams.set('title', '')
     }
     setSearchParams(searchParams, { preventScrollReset: true })
+  }
+
+  const handleReset = () => {
+    setSearchKeyword('')
+    setCategoryId(0)
+    setOrderId(0)
+    setConnectionTypeId(0)
+    setSearchParams({}, { preventScrollReset: true })
   }
 
   const selectCategory = (id: number) => {
@@ -122,6 +130,7 @@ export default function Home() {
             <input
               className='w-full rounded-lg border border-gray-200 py-3 pl-10 pr-4 text-sm outline-none transition-shadow focus:border-blue-300 focus:ring-2 focus:ring-blue-100'
               placeholder='팀프로젝트, 코테, 스터디를 입력해보세요!'
+              value={searchKeyword}
               onChange={onSearchInputChange}
             />
           </div>
@@ -130,6 +139,15 @@ export default function Home() {
             type='submit'
           >
             검색
+          </Button>
+          <Button
+            type='button'
+            variant='outline'
+            className='h-full whitespace-nowrap rounded-lg px-4 py-3 font-semibold gap-1.5'
+            onClick={handleReset}
+          >
+            <RotateCcw className='h-4 w-4' />
+            초기화
           </Button>
         </form>
         <div className='mt-8 flex items-center justify-between'>

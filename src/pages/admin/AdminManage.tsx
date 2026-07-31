@@ -75,7 +75,7 @@ export default function AdminManage() {
                 <th scope='col' className='px-6 py-3'>
                   이메일
                 </th>
-                <th scope='col' className='px-6 py-3'>
+                <th scope='col' className='min-w-[8rem] px-6 py-3'>
                   유저명
                 </th>
                 <th scope='col' className='px-6 py-3'>
@@ -99,7 +99,7 @@ export default function AdminManage() {
                     {item.seq}
                   </th>
                   <td className='px-6 py-4'>{item.email}</td>
-                  <td className='px-6 py-4'>{item.username}</td>
+                  <td className='min-w-[8rem] whitespace-nowrap px-6 py-4'>{item.username}</td>
                   <td className='px-6 py-4'>{item.nickname}</td>
                   <td className='px-6 py-4'>{item.role}</td>
                   <td className='px-6 py-4'>{item.socialType}</td>

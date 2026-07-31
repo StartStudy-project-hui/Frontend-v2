@@ -12,6 +12,11 @@ import {
   SignupRequestDto,
   UserListRequestInfo,
   WritePostRequestDto,
+  BlacklistCreateRequestDto,
+  BlacklistUpdateRequestDto,
+  BlacklistListRequestDto,
+  BlacklistHistoryListRequestDto,
+  BlacklistHistoryByTargetRequestDto,
 } from '@/types/Dto'
 import {
   createComment,
@@ -38,6 +43,14 @@ import {
   updatePost,
   updateRecruit,
   updateUserInfo,
+  getBlacklistPage,
+  registerBlacklist,
+  updateBlacklist,
+  deleteBlacklist,
+  makeBlacklistPermanent,
+  getBlacklistHistoryPage,
+  getBlacklistHistoryByTarget,
+  getMyBlacklistHistory,
 } from '@/lib/axios/api'
 import { QUERY_KEYS } from '@/lib/react-query/queryKeys'
 
@@ -217,5 +230,63 @@ export const useGetAdminDashboard = (data: UserListRequestInfo) => {
 export const useDeletePostFromAdmin = () => {
   return useMutation({
     mutationFn: (boardId: string) => deletePostFromAdmin(boardId),
+  })
+}
+
+export const useGetBlacklist = (data: BlacklistListRequestDto) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_BLACKLIST],
+    queryFn: () => getBlacklistPage(data),
+    enabled: false,
+  })
+}
+
+export const useRegisterBlacklist = () => {
+  return useMutation({
+    mutationFn: (data: BlacklistCreateRequestDto) => registerBlacklist(data),
+  })
+}
+
+export const useUpdateBlacklist = () => {
+  return useMutation({
+    mutationFn: (data: BlacklistUpdateRequestDto) => updateBlacklist(data),
+  })
+}
+
+export const useDeleteBlacklist = () => {
+  return useMutation({
+    mutationFn: (blacklistId: string) => deleteBlacklist(blacklistId),
+  })
+}
+
+export const useMakeBlacklistPermanent = () => {
+  return useMutation({
+    mutationFn: (blacklistId: string) => makeBlacklistPermanent(blacklistId),
+  })
+}
+
+export const useGetBlacklistHistory = (data: BlacklistHistoryListRequestDto) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_BLACKLIST_HISTORY],
+    queryFn: () => getBlacklistHistoryPage(data),
+    enabled: false,
+  })
+}
+
+export const useGetBlacklistHistoryByTarget = (
+  data: BlacklistHistoryByTargetRequestDto,
+  enabled: boolean
+) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_BLACKLIST_HISTORY_BY_TARGET, data.blacklistId, data.page],
+    queryFn: () => getBlacklistHistoryByTarget(data),
+    enabled,
+  })
+}
+
+export const useGetMyBlacklistHistory = (page: number) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_MY_BLACKLIST_HISTORY, page],
+    queryFn: () => getMyBlacklistHistory(page.toString()),
   })
 }

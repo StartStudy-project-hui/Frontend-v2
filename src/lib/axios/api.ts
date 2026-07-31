@@ -16,6 +16,14 @@ import {
   UserResponseDto,
   UserInfoDto,
   BoardDetailDto,
+  BlacklistCreateRequestDto,
+  BlacklistUpdateRequestDto,
+  BlacklistListRequestDto,
+  BlacklistHistoryListRequestDto,
+  BlacklistHistoryByTargetRequestDto,
+  BlacklistResponseDto,
+  BlacklistHistoryResponseDto,
+  MyBlacklistHistoryResponseDto,
 } from '@/types/Dto'
 import {
   getAccessToken,
@@ -406,6 +414,107 @@ export const deletePostFromAdmin = async (boardId: string) => {
   const config = userConfig({
     url: `/api/v1/admin/board/${boardId}?role=ROLE_ADMIN`,
     method: 'DELETE',
+  })
+  const res = await axios(config)
+  return res.data
+}
+
+// ==============================
+/* 블랙리스트 */
+// ==============================
+export const getBlacklistPage = async ({
+  id,
+  type,
+  status,
+  email,
+  page,
+}: BlacklistListRequestDto): Promise<BlacklistResponseDto> => {
+  const config = userConfig({
+    url: `/api/v1/back-list/admin`,
+    method: 'GET',
+    params: { id, type, status, email, page },
+  })
+  const res = await axios(config)
+  return res.data
+}
+
+export const registerBlacklist = async (data: BlacklistCreateRequestDto) => {
+  const config = userConfig({
+    url: `/api/v1/back-list/admin`,
+    method: 'POST',
+    data,
+  })
+  const res = await axios(config)
+  return res.data
+}
+
+export const updateBlacklist = async ({
+  blacklistId,
+  reason,
+}: BlacklistUpdateRequestDto) => {
+  const config = userConfig({
+    url: `/api/v1/back-list/admin/${blacklistId}`,
+    method: 'PATCH',
+    data: { reason },
+  })
+  const res = await axios(config)
+  return res.data
+}
+
+export const makeBlacklistPermanent = async (blacklistId: string) => {
+  const config = userConfig({
+    url: `/api/v1/back-list/admin/${blacklistId}/permanent`,
+    method: 'PATCH',
+  })
+  const res = await axios(config)
+  return res.data
+}
+
+export const deleteBlacklist = async (blacklistId: string) => {
+  const config = userConfig({
+    url: `/api/v1/back-list/admin/${blacklistId}`,
+    method: 'DELETE',
+  })
+  const res = await axios(config)
+  return res.data
+}
+
+export const getBlacklistHistoryPage = async ({
+  id,
+  type,
+  status,
+  action,
+  page,
+}: BlacklistHistoryListRequestDto): Promise<BlacklistHistoryResponseDto> => {
+  const config = userConfig({
+    url: `/api/v1/back-list-history/admin/`,
+    method: 'GET',
+    params: { id, type, status, action, page },
+  })
+  const res = await axios(config)
+  return res.data
+}
+
+export const getBlacklistHistoryByTarget = async ({
+  blacklistId,
+  page,
+}: BlacklistHistoryByTargetRequestDto): Promise<BlacklistHistoryResponseDto> => {
+  const config = userConfig({
+    url: `/api/v1/back-list-history/admin/${blacklistId}`,
+    method: 'GET',
+    params: { page },
+  })
+  const res = await axios(config)
+  return res.data
+}
+
+export const getMyBlacklistHistory = async (
+  page?: string
+): Promise<MyBlacklistHistoryResponseDto> => {
+  const config = userConfig({
+    url: `/api/v1/back-list-history/me`,
+    method: 'GET',
+    params: { page },
   })
   const res = await axios(config)
   return res.data

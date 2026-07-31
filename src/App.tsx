@@ -13,11 +13,13 @@ import Write from '@/pages/Write'
 import Profile from '@/pages/mypage/Profile'
 import Posts from '@/pages/mypage/Posts'
 import Likes from '@/pages/mypage/Likes'
+import Blacklist from '@/pages/mypage/Blacklist'
 import DashboardLayout from '@/pages/mypage/DashboardLayout'
 import ProfileEdit from '@/pages/mypage/profile/ProfileEdit'
 import AdminDashboardLayout from '@/pages/admin/AdminDashboardLayout'
 import AdminDashboard from '@/pages/admin/AdminDashboard'
 import AdminManage from '@/pages/admin/AdminManage'
+import AdminBlacklist from '@/pages/admin/AdminBlacklist'
 import BoardDetail from '@/pages/board/BoardDetail'
 import { Toaster } from '@/components/ui/toaster'
 import { Header } from '@/components'
@@ -85,6 +87,10 @@ function App() {
                   path: 'likes',
                   element: <Likes />,
                 },
+                {
+                  path: 'blacklist',
+                  element: <Blacklist />,
+                },
               ],
             },
             {
@@ -98,6 +104,10 @@ function App() {
                 {
                   path: 'manage',
                   element: <AdminManage />,
+                },
+                {
+                  path: 'blacklist',
+                  element: <AdminBlacklist />,
                 },
               ],
             },

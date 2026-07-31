@@ -240,3 +240,104 @@ export interface SortDto {
   sorted: boolean
   unsorted: boolean
 }
+
+// =======================
+// BLACKLIST
+// =======================
+export type BlackType = 'EMAIL'
+export type BlacklistStatus = 'PERMANENT' | 'ACTIVE' | 'EXPIRED'
+export type BlacklistAction = 'REGISTER' | 'UPDATE' | 'DELETE' | 'EXTEND'
+
+export interface BlacklistCreateRequestDto {
+  rawValue: string
+  reason: string
+  durationMonths: number
+}
+
+export interface BlacklistUpdateRequestDto {
+  blacklistId: string
+  reason: string
+}
+
+export interface BlacklistListRequestDto {
+  id?: string
+  type?: BlackType
+  status?: string
+  email?: string
+  page?: string
+}
+
+export interface BlacklistHistoryListRequestDto extends BlacklistListRequestDto {
+  action?: string
+}
+
+export interface BlacklistHistoryByTargetRequestDto {
+  blacklistId: string
+  page?: string
+}
+
+export interface BlacklistItemDto {
+  id: number
+  type: BlackType
+  reason: string
+  createdAt: string
+  status: BlacklistStatus
+}
+
+export interface BlacklistResponseDto {
+  totalElements: number
+  totalPages: number
+  size: number
+  content: BlacklistItemDto[]
+  number: number
+  sort: SortDto
+  first: boolean
+  last: boolean
+  numberOfElements: number
+  pageable: PageableDto
+  empty: boolean
+}
+
+export interface BlacklistHistoryItemDto {
+  id: number
+  reason: string
+  createdAt: string
+  type: BlackType
+  createBy: string
+  status: BlacklistStatus
+  action: BlacklistAction
+  hashValue: string
+}
+
+export interface BlacklistHistoryResponseDto {
+  totalElements: number
+  totalPages: number
+  size: number
+  content: BlacklistHistoryItemDto[]
+  number: number
+  sort: SortDto
+  first: boolean
+  last: boolean
+  numberOfElements: number
+  pageable: PageableDto
+  empty: boolean
+}
+
+export interface MyBlacklistHistoryItemDto {
+  id: number
+  reason: string
+  createdAt: string
+  type: BlackType
+  status: BlacklistStatus
+  action: BlacklistAction
+}
+
+export interface MyBlacklistHistoryResponseDto {
+  content: MyBlacklistHistoryItemDto[]
+  number: number
+  size: number
+  first: boolean
+  last: boolean
+  numberOfElements: number
+  empty: boolean
+}
