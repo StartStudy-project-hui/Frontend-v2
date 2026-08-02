@@ -26,6 +26,13 @@ jobs:
       - name: Install Vercel CLI
         run: npm install -g vercel
 
+      - name: Debug Vercel Auth
+        run: |
+          echo "== whoami =="
+          vercel whoami --token=${{ secrets.VERCEL_TOKEN }}
+          echo "== project ls =="
+          vercel project ls --token=${{ secrets.VERCEL_TOKEN }}
+
       - name: Pull Vercel Environment
         run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
         env:
@@ -62,6 +69,13 @@ jobs:
 
       - name: Install Vercel CLI
         run: npm install -g vercel
+
+      - name: Debug Vercel Auth
+        run: |
+          echo "== whoami =="
+          vercel whoami --token=${{ secrets.VERCEL_TOKEN }}
+          echo "== project ls =="
+          vercel project ls --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Pull Vercel Environment
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
