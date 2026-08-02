@@ -48,9 +48,6 @@ jobs:
   deploy-production:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
