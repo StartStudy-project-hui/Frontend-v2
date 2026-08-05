@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Apple } from 'lucide-react'
 
 import {
   Dialog,
@@ -13,6 +12,26 @@ import { SigininForm, SignupForm } from '@/components/form'
 
 type props = {
   target?: '회원가입' | '로그인' | null
+}
+
+function AuthModalHeader({
+  title,
+  description,
+}: {
+  title: string
+  description: string
+}) {
+  return (
+    <DialogHeader className='flex flex-col items-center gap-3'>
+      <img src='/logo.png' className='h-10 w-auto' alt='Start Study' />
+      <div className='flex flex-col items-center gap-1'>
+        <DialogTitle className='text-2xl font-bold'>{title}</DialogTitle>
+        <DialogDescription className='text-sm font-normal text-gray-500'>
+          {description}
+        </DialogDescription>
+      </div>
+    </DialogHeader>
+  )
 }
 
 export default function Modal({ target }: props) {
@@ -36,21 +55,13 @@ export default function Modal({ target }: props) {
       <DialogTrigger className='rounded-md px-3 py-2 transition-colors hover:bg-gray-50 hover:text-gray-900'>
         {target}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className='max-w-md'>
         {currentTarget === '회원가입' && (
           <>
-            <DialogHeader className='flex flex-col items-center gap-2'>
-              <div className='flex justify-center items-center gap-1'>
-                <Apple width={64} height={64} />
-                <span className='text-2xl font-extrabold'>LOGO</span>
-              </div>
-              <DialogTitle className='text-3xl font-semibold md:font-bold'>
-                회원가입
-              </DialogTitle>
-              <DialogDescription className='font-light'>
-                서비스 이용을 위해 접속하세요!
-              </DialogDescription>
-            </DialogHeader>
+            <AuthModalHeader
+              title='회원가입'
+              description='서비스 이용을 위해 접속하세요!'
+            />
             {open && (
               <SignupForm handleTarget={handleTarget} closeModal={closeModal} />
             )}
@@ -59,18 +70,10 @@ export default function Modal({ target }: props) {
 
         {currentTarget === '로그인' && (
           <>
-            <DialogHeader className='flex flex-col items-center gap-2'>
-              <div className='flex justify-center items-center gap-1'>
-                <Apple width={64} height={64} />
-                <span className='text-2xl font-extrabold'>LOGO</span>
-              </div>
-              <DialogTitle className='text-3xl font-semibold md:font-bold'>
-                계정 로그인
-              </DialogTitle>
-              <DialogDescription className='font-light'>
-                서비스 이용을 위해 접속하세요!
-              </DialogDescription>
-            </DialogHeader>
+            <AuthModalHeader
+              title='계정 로그인'
+              description='서비스 이용을 위해 접속하세요!'
+            />
             {open && (
               <SigininForm
                 handleTarget={handleTarget}

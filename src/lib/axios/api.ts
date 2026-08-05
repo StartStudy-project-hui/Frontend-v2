@@ -9,6 +9,8 @@ import {
   ModifyRecruitInfo,
   SigninInfo,
   SignupRequestDto,
+  EmailSendCodeRequestDto,
+  EmailVerifyCodeRequestDto,
   BoardRequestDto,
   AddCommentRequestDto,
   EditCommentRequestDto,
@@ -131,6 +133,26 @@ export const signInAccount = async (data: SigninInfo) => {
   const refreshToken = res.headers['refresh_token']
   setAccessToken(accessToken)
   setRefreshToken(refreshToken)
+  return res.data
+}
+
+export const sendVerificationCode = async (data: EmailSendCodeRequestDto) => {
+  const config = publicConfig({
+    url: '/api/v1/auth/email/send-code',
+    method: 'POST',
+    data,
+  })
+  const res = await axios(config)
+  return res.data
+}
+
+export const verifyEmailCode = async (data: EmailVerifyCodeRequestDto) => {
+  const config = publicConfig({
+    url: '/api/v1/auth/email/verify-code',
+    method: 'POST',
+    data,
+  })
+  const res = await axios(config)
   return res.data
 }
 

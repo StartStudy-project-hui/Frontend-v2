@@ -11,6 +11,15 @@ export interface SignupRequestDto {
   checkPwd: string
 }
 
+export interface EmailSendCodeRequestDto {
+  email: string
+}
+
+export interface EmailVerifyCodeRequestDto {
+  email: string
+  code: string
+}
+
 export interface WritePostRequestDto {
   content: string
   category: string

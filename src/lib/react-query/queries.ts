@@ -10,6 +10,8 @@ import {
   ModifyUserInfo,
   SigninInfo,
   SignupRequestDto,
+  EmailSendCodeRequestDto,
+  EmailVerifyCodeRequestDto,
   UserListRequestInfo,
   WritePostRequestDto,
   BlacklistCreateRequestDto,
@@ -38,6 +40,8 @@ import {
   signInAccount,
   signOutAccount,
   signUpAccount,
+  sendVerificationCode,
+  verifyEmailCode,
   unlikePostById,
   updateComment,
   updatePost,
@@ -69,6 +73,18 @@ export const useSignInAccount = () => {
 export const useSingoutAccount = () => {
   return useMutation({
     mutationFn: () => signOutAccount(),
+  })
+}
+
+export const useSendVerificationCode = () => {
+  return useMutation({
+    mutationFn: (data: EmailSendCodeRequestDto) => sendVerificationCode(data),
+  })
+}
+
+export const useVerifyEmailCode = () => {
+  return useMutation({
+    mutationFn: (data: EmailVerifyCodeRequestDto) => verifyEmailCode(data),
   })
 }
 
