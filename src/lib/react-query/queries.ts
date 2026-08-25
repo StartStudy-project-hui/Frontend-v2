@@ -104,7 +104,7 @@ export const useCreatePost = () => {
 
 export const useGetPostById = (boardId?: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.GET_POST_BY_ID],
+    queryKey: [QUERY_KEYS.GET_POST_BY_ID, boardId],
     queryFn: () => getPostById(boardId),
     enabled: false,
   })

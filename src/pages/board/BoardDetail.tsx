@@ -32,7 +32,9 @@ export default function BoardDetail() {
 
   useEffect(() => {
     if (boardId) {
-      increaseViewCountAsync(boardId)
+      increaseViewCountAsync(boardId).then(() => {
+        setTrigger()
+      })
     }
   }, [boardId])
 
