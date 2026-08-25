@@ -55,15 +55,20 @@ export default function BoardDetailOptions({ boardId, boardData }: props) {
     const { signal } = abortControllerRef.current
 
     try {
-      if (!isFavorite) {
-        await likePostAsync({ boardId, signal })
-      } else if (postLikeId) {
-        await unlikePostAsync({ postLikeId, signal })
-      }
-      const { data } = await fetchPostLikeStatus()
-      if (data) {
-        setIsFavorite(data.postLike === '관심 완료')
-        setPostLikeId(data.postLikeId ?? null)
+      try {
+        if (!isFavorite) {
+          await likePostAsync({ boardId, signal })
+        } else if (postLikeId) {
+          await unlikePostAsync({ postLikeId, signal })
+        }
+      } finally {
+        // 요청이 실패해도(예: 다른 탭에서 이미 처리된 중복 요청) 화면이
+        // 서버의 실제 상태와 어긋나지 않도록 항상 최신 상태로 재동기화한다.
+        const { data } = await fetchPostLikeStatus()
+        if (data) {
+          setIsFavorite(data.postLike === '관심 완료')
+          setPostLikeId(data.postLikeId ?? null)
+        }
       }
       setTrigger()
     } finally {
