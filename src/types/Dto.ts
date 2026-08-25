@@ -105,7 +105,7 @@ export interface PageableDto {
 }
 
 export interface BoardDetailDto {
-  recruit: string
+  recruitStatus: string
   currentNickname: string
   title: string
   boardWriteNickname: string

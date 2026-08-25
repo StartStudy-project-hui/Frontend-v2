@@ -40,7 +40,7 @@ export default function BoardDetail() {
 
   const toggleRecruit = async () => {
     if (boardId) {
-      const recruit = boardData?.recruit === '모집중' ? '모집완료' : '모집중'
+      const recruit = boardData?.recruitStatus === '모집중' ? '모집완료' : '모집중'
       await updateRecruitAsync({ boardId, recruit })
       setTrigger()
       toast({
@@ -63,7 +63,7 @@ export default function BoardDetail() {
           <div className='mt-4 flex flex-wrap items-center gap-2'>
             <Chip content={boardData.category} />
             <Chip content={boardData.connectionType} />
-            <Chip content={boardData.recruit} />
+            <Chip content={boardData.recruitStatus} />
             {userInfo?.nickname === boardData.boardWriteNickname && (
               <button
                 className='rounded-full border border-gray-200 px-2.5 py-1 text-xs font-medium text-gray-500 transition-colors hover:border-gray-300 hover:text-gray-700'
