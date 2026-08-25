@@ -120,15 +120,7 @@ export default function BoardDetail() {
           </section>
 
           <section className='border-t border-gray-100 pt-6'>
-            <div className='flex items-center gap-1.5 text-sm font-semibold text-gray-800'>
-              댓글
-              <span className='text-gray-400'>
-                {boardData.replyResponseDto?.getTotal}
-              </span>
-            </div>
-            <div className='mt-4'>
-              <Comment boardId={boardId!} boardData={boardData} />
-            </div>
+            <Comment boardId={boardId!} boardData={boardData} />
           </section>
         </div>
       )}

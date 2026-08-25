@@ -25,6 +25,7 @@ export default function Comment({ boardId }: props) {
     refetch: fetchComments,
   } = useGetCommentsByBoardId(boardId) as {
     data: {
+      getTotal: number,
       replies: {
         children: any,
         replyId: string,
@@ -87,7 +88,12 @@ export default function Comment({ boardId }: props) {
 
   return (
     <div>
-      <CommentForm appear='form' boardId={boardId!} action='create' />
+      <div className='flex items-center gap-1.5 text-sm font-semibold text-gray-800'>
+        댓글
+        <span className='text-gray-400'>{commentData?.getTotal}</span>
+      </div>
+      <div className='mt-4'>
+        <CommentForm appear='form' boardId={boardId!} action='create' />
       <ul className='mt-6 flex flex-col divide-y divide-gray-100'>
         {commentData?.replies && commentData.replies.map((comment) => {
           const replies = pureReplies(comment.children)
@@ -222,6 +228,7 @@ export default function Comment({ boardId }: props) {
           )
         })}
       </ul>
+      </div>
     </div>
   )
 }
