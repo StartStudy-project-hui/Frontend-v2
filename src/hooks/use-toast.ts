@@ -6,7 +6,8 @@ import type {
 } from "@/components/ui/toast"
 
 const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 1000000
+const TOAST_REMOVE_DELAY = 1000
+const TOAST_AUTO_DISMISS_DELAY = 4000
 
 type ToasterToast = ToastProps & {
   id: string
@@ -160,6 +161,11 @@ function toast({ ...props }: Toast) {
       },
     },
   })
+
+  // Radix의 자체 duration 기반 자동 닫힘에만 의존하면 토스트가 화면에
+  // 계속 남는 경우가 있어(예: 인증번호 오류 토스트가 인증 성공 후에도
+  // 사라지지 않던 문제), 일정 시간 뒤 명시적으로 닫히도록 보장한다.
+  setTimeout(() => dismiss(), TOAST_AUTO_DISMISS_DELAY)
 
   return {
     id: id,
