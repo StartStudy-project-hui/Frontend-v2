@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/button'
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 type props = {
-  handleTarget: (_target: '회원가입' | '로그인' | null) => void
+  handleTarget: (_target: '회원가입' | '로그인' | '비밀번호 찾기' | null) => void
   closeModal: () => void
 }
 
@@ -108,6 +108,15 @@ export default function SigninForm({ handleTarget, closeModal }: props) {
               className='ml-1 text-blue-500 underline font-semibold'
             >
               회원가입
+            </button>
+          </p>
+          <p className='text-small-regular text-light-2 text-center'>
+            <button
+              type='button'
+              onClick={() => handleTarget('비밀번호 찾기')}
+              className='text-blue-500 underline font-semibold'
+            >
+              비밀번호를 잊으셨나요?
             </button>
           </p>
         </form>

@@ -8,7 +8,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { SigininForm, SignupForm } from '@/components/form'
+import { SigininForm, SignupForm, PasswordResetForm } from '@/components/form'
+
+type AuthTarget = '회원가입' | '로그인' | '비밀번호 찾기' | null
 
 type props = {
   target?: '회원가입' | '로그인' | null
@@ -35,14 +37,14 @@ function AuthModalHeader({
 }
 
 export default function Modal({ target }: props) {
-  const [currentTarget, setCurrentTarget] = useState<typeof target>(null)
+  const [currentTarget, setCurrentTarget] = useState<AuthTarget>(null)
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    setCurrentTarget(target)
+    setCurrentTarget(target ?? null)
   }, [target])
 
-  const handleTarget = (_target: typeof target) => {
+  const handleTarget = (_target: AuthTarget) => {
     setCurrentTarget(_target)
   }
 
@@ -80,6 +82,16 @@ export default function Modal({ target }: props) {
                 closeModal={closeModal}
               />
             )}
+          </>
+        )}
+
+        {currentTarget === '비밀번호 찾기' && (
+          <>
+            <AuthModalHeader
+              title='비밀번호 재설정'
+              description='이메일 인증 후 새 비밀번호로 재설정하세요!'
+            />
+            {open && <PasswordResetForm handleTarget={handleTarget} />}
           </>
         )}
       </DialogContent>

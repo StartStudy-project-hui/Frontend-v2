@@ -12,6 +12,8 @@ import {
   SignupRequestDto,
   EmailSendCodeRequestDto,
   EmailVerifyCodeRequestDto,
+  PasswordResetSendCodeRequestDto,
+  PasswordResetRequestDto,
   UserListRequestInfo,
   WritePostRequestDto,
   BlacklistCreateRequestDto,
@@ -42,6 +44,8 @@ import {
   signUpAccount,
   sendVerificationCode,
   verifyEmailCode,
+  sendPasswordResetCode,
+  resetPassword,
   unlikePostById,
   updateComment,
   updatePost,
@@ -85,6 +89,19 @@ export const useSendVerificationCode = () => {
 export const useVerifyEmailCode = () => {
   return useMutation({
     mutationFn: (data: EmailVerifyCodeRequestDto) => verifyEmailCode(data),
+  })
+}
+
+export const useSendPasswordResetCode = () => {
+  return useMutation({
+    mutationFn: (data: PasswordResetSendCodeRequestDto) =>
+      sendPasswordResetCode(data),
+  })
+}
+
+export const useResetPassword = () => {
+  return useMutation({
+    mutationFn: (data: PasswordResetRequestDto) => resetPassword(data),
   })
 }
 

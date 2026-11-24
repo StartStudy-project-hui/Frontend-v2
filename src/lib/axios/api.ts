@@ -11,6 +11,8 @@ import {
   SignupRequestDto,
   EmailSendCodeRequestDto,
   EmailVerifyCodeRequestDto,
+  PasswordResetSendCodeRequestDto,
+  PasswordResetRequestDto,
   BoardRequestDto,
   AddCommentRequestDto,
   EditCommentRequestDto,
@@ -149,6 +151,28 @@ export const sendVerificationCode = async (data: EmailSendCodeRequestDto) => {
 export const verifyEmailCode = async (data: EmailVerifyCodeRequestDto) => {
   const config = publicConfig({
     url: '/api/v1/auth/email/verify-code',
+    method: 'POST',
+    data,
+  })
+  const res = await axios(config)
+  return res.data
+}
+
+export const sendPasswordResetCode = async (
+  data: PasswordResetSendCodeRequestDto
+) => {
+  const config = publicConfig({
+    url: '/api/v1/auth/password/reset/send-code',
+    method: 'POST',
+    data,
+  })
+  const res = await axios(config)
+  return res.data
+}
+
+export const resetPassword = async (data: PasswordResetRequestDto) => {
+  const config = publicConfig({
+    url: '/api/v1/auth/password/reset',
     method: 'POST',
     data,
   })

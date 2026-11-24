@@ -20,6 +20,16 @@ export interface EmailVerifyCodeRequestDto {
   code: string
 }
 
+export interface PasswordResetSendCodeRequestDto {
+  email: string
+}
+
+export interface PasswordResetRequestDto {
+  email: string
+  newPwd: string
+  newCheckPwd: string
+}
+
 export interface WritePostRequestDto {
   content: string
   category: string

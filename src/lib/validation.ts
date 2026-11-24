@@ -13,6 +13,12 @@ export const SigninValidation = z.object({
   pwd: z.string().min(4, { message: '비밀번호는 최소 4글자입니다.' }),
 })
 
+export const PasswordResetValidation = z.object({
+  email: z.string().email('유효한 이메일이 아닙니다.'),
+  newPwd: z.string().min(8, { message: '비밀번호는 최소 8글자입니다.' }),
+  newCheckPwd: z.string().min(8, { message: '비밀번호는 최소 8글자입니다.' }),
+})
+
 export const ProfileValidation = z.object({
   email: z.string().email('유효한 이메일이 아닙니다.'),
   username: z.string(),
